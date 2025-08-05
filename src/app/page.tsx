@@ -48,7 +48,7 @@ export default function Home() {
               </div>
               <div>
                 <h2 className="text-white font-bold text-2xl">Stream Your Run</h2>
-                <p className="text-white ">Stream the entirety of your on Twitch or YouTube.</p>
+                <p className="text-white ">Stream the entirety of your run on Twitch or YouTube.</p>
               </div>
             </div>
             <div className="flex w-[300px] gap-2">
