@@ -145,7 +145,7 @@ export default function RulesSection() {
                 {
                   segments: [
                     { text: "Register on the " },
-                    { text: "official website", href: "https://example.com/official-website" },
+                    { text: "official website", href: "https://thehunt-virid.vercel.app/" },
                     { text: "." },
                   ],
                 },
@@ -153,15 +153,18 @@ export default function RulesSection() {
                 {
                   segments: [
                     { text: "Join the Borderlands Community Team on " },
-                    { text: "Tiltify", href: "https://tiltify.com" },
+                    { text: "Tiltify", href: "https://tiltify.com/team-invite/CBcyLY1TRyBxwYJi7fKnKpp",  className: "text-[#BBFE17] hover:underline", },
                     { text: "." },
                   ],
                 },
                 {
                   segments: [
                     {
-                      text: "Create a campaign supporting the team on Tiltify (campaign URL will be provided).",
+                      text: "Create a campaign supporting the ",
                     },
+                    {
+                      text: "team campaign on Tiltify.", href: "https://tiltify.com/+borderlands-community/the-hunt-prepare-for-mayhem", className: "text-[#BBFE17] hover:underline",
+                    }
                   ],
                 },
                 {
@@ -679,9 +682,7 @@ export default function RulesSection() {
             },
             {
               segments: [
-                { text: "If the item drops out of bounds, you may visit the " },
-                { text: "Lost Loot Machine", href: "https://borderlands.com/lost-loot" },
-                { text: " to show the item card instead." },
+                { text: "If the item drops out of bounds, you may visit the Lost Loot Machine to show the item card instead." },
               ],
               subItems: [
                 { segments: [{ text: "Must be obvious the item dropped from the dedicated source." }] },

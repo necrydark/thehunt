@@ -26,7 +26,8 @@ export default function Home() {
       <Hero />
       {/* How To Participate */}
       <section className="container max-w-6xl  relative z-10 mx-auto pt-[9rem]" id="how-to-participate">
-        <h1 className="text-3xl font-bold uppercase text-[#BBFE17] text-center mb-8 ">How To Participate</h1>
+        <h1 className="text-3xl font-bold uppercase text-[#BBFE17] text-center  ">How To Participate</h1>
+        <p className="mb-8 mt-4 text-muted-foreground text-[14px] text-center">If you&apos;re new here, check out how to join along in all the mayhem!</p>
         <div className="flex flex-col justify-center items-center  gap-4">
             <div className="flex w-[300px] gap-2">
               <div className="bg-[#BBFE17] rounded-full p-3 h-fit text-2xl">
@@ -131,7 +132,8 @@ export default function Home() {
           alt="Overlay Example"
           className=""
           />
-          <p className="mt-2 mb-6 text-4xl font-bold text-[#BBFE17] text-center">Stream Overlay</p>
+          <h2 className="mt-2  text-4xl font-bold text-[#BBFE17] text-center">Stream Overlay</h2>
+          <p className="text-sm mb-6 mt-2 text-muted-foreground text-center">By PilotPlays Games</p>
           <Link href={"/obs-overlay.zip"}>
           <Button className="bg-[#BBFE17] hover:bg-[#BBFE17]/75 cursor-pointer  text-black">
               Download
