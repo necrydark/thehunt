@@ -208,9 +208,7 @@ export default function RulesSection() {
               subItems: [
                 {
                   segments: [
-                    { text: "Joining a game late for loot or progression is " },
-                    { text: "not allowed", className: "font-bold line-through" },
-                    { text: " (e.g., entering just before a boss kill)." },
+                    { text: "Joining a game late for loot or progression is not allowed (e.g., entering just before a boss kill)." },
                   ],
                 },
                 { segments: [{ text: "All players in a party must be within +3 levels of the host." }] },
@@ -249,8 +247,14 @@ export default function RulesSection() {
         {
           type: "list",
           items: [
-            { icon: "x", segments: [{ text: "Items from Golden Chest, Diamond Loot Room, or Vault Cards/Chests." }] },
-            { icon: "x", segments: [{ text: "Vault Card XP is allowed as there's no way to disable it." }] },
+            { icon: "x", segments: [{ text: "Items from Golden Chest, Diamond Loot Room, or Vault Cards/Chests." }],
+          subItems: [
+            {
+              segments: [{
+                text: "Vault Card XP is allowed as there's no way to disable it."
+              }]
+            }
+          ]},
             { icon: "x", segments: [{ text: "Gear from your bank that was not found during the Hunt." }] },
             { icon: "x", segments: [{ text: "Items from Deluxe editions or pre-order bonuses." }] },
             { icon: "x", segments: [{ text: "Mailed items from other players." }] },
