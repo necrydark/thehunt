@@ -13,6 +13,7 @@ const links = [
   { name: "Rules", url: "#rules" },
   { name: "Assets", url: "#assets" },
   { name: "Merch", url: "https://www.bonfire.com/store/borderlands-community-fundraising-team/" },
+  {name: "Login", url: "/login"}
 ];
 
 const Navbar = () => {

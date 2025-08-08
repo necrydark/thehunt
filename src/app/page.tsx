@@ -1,4 +1,3 @@
-// import Image from "next/image";
 
 import Hero from "@/components/hero";
 import Carousels from "@/components/home/carousels";
@@ -7,13 +6,22 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { previous } from "@/data/data";
+import { auth } from "@/lib/auth";
 import { Calendar } from "lucide-react";
+import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 
 
 
-export default function Home() {
+export default async function Home() {
+
+  const session = await auth.api.getSession({
+    headers: await headers()
+  })
+
+  console.log(session)
+
   return (
     <div className="min-h-screen w-full relative">
       <div
