@@ -6,9 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { previous } from "@/data/data";
-import { auth } from "@/lib/auth";
+// import { auth } from "@/lib/auth";
 import { Calendar } from "lucide-react";
-import { headers } from "next/headers";
+// import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -16,11 +16,10 @@ import Link from "next/link";
 
 export default async function Home() {
 
-  const session = await auth.api.getSession({
-    headers: await headers()
-  })
+  // const session = await auth.api.getSession({
+  //   headers: await headers()
+  // })
 
-  console.log(session)
 
   return (
     <div className="min-h-screen w-full relative">
@@ -43,10 +42,10 @@ export default async function Home() {
               </div>
               <div>
                 <h2 className="text-white font-bold text-2xl">Get Started</h2>
-                <p className="text-white ">Register your account and copy the 
-                  <Link href={"https://docs.google.com/spreadsheets/d/1NNuIHoswvRbsuSWE794pABST5nC6pXMGAUJkw8SyVsg/edit?gid=0#gid=0"} className="text-[#BBFE17] hover:underline" target="_blank">
-                  {" "}spreadsheet.
-                  </Link>
+                <p className="text-white ">  <Link href={"/login"} className="text-[#BBFE17] hover:underline">
+                  {" "}Register
+                  </Link> your account to get started. 
+                
                 </p>
               </div>
             </div>
@@ -65,7 +64,7 @@ export default async function Home() {
               </div>
               <div>
                 <h2 className="text-white font-bold text-2xl">Finale</h2>
-                <p className="text-white ">Acculumate points and rank high on the leaderboard.</p>
+                <p className="text-white ">Accumulate Points <span className="text-[10px] italic">(in Joltz&apos;s voice)</span> and rank high on the scoreboard.</p>
               </div>
             </div>
         </div>

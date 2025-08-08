@@ -20,7 +20,7 @@ export const auth = betterAuth({
             role: { 
                 type: "string", 
                 required: false, // Changed from true
-                defaultValue: "PARTICIPANT" 
+                defaultValue: "Participant" 
             },
             totalPoints: {
                 type: "number",

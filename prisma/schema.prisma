@@ -10,16 +10,13 @@ datasource db {
 
 model User {
   id                  String       @id
-  name                String
+  name                String       @unique
   email               String?      @unique
   image               String?
   createdAt           DateTime
   updatedAt           DateTime
   role                String
-  totalPoints         Int?
-  twitchId            String?
-  twitchUsername      String?
-  twitchAvatarUrl     String?
+  totalPoints         Int?         @default(0)
   emailVerified       Boolean?
   reviewedSubmissions Submission[] @relation("AdminReviews")
   submissions         Submission[]
@@ -94,15 +91,23 @@ model Submission {
 }
 
 model Item {
-  id          String       @id @default(cuid())
-  name        String       @unique
-  description String?
-  points      Int
-  imageUrl    String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  submissions Submission[]
-  userItems   UserItem[]
+  id           String       @id @default(cuid())
+  name         String       @unique
+  points       Int
+  mayhem       String
+  listGroup    String
+  type         String
+  manufacturer String?
+  source       String
+  maps         String
+  missionType  String
+  rarity       Int
+  notes        String?
+  imageUrl     String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  submissions  Submission[]
+  userItems    UserItem[]
 }
 
 model UserItem {

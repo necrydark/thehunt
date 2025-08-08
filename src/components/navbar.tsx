@@ -1,5 +1,6 @@
 "use client"
 
+import { authClient } from "@/lib/auth-client";
 import { Menu, X } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
@@ -7,18 +8,22 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MotionLink } from "./motion-comps";
 import { Button } from "./ui/button";
+import UserButton from "./user-button";
 
 const links = [
   { name: "Home", url: "/" },
   { name: "Rules", url: "#rules" },
   { name: "Assets", url: "#assets" },
   { name: "Merch", url: "https://www.bonfire.com/store/borderlands-community-fundraising-team/" },
-  {name: "Login", url: "/login"}
 ];
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+      const { 
+        data: session, 
+    } = authClient.useSession() 
 
 
   useEffect(() => {
@@ -41,6 +46,8 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   });
 
+
+  console.log("Session", session)
 
 
   return (
@@ -68,7 +75,19 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
-          <Link href="#">
+
+        {!session ? (
+          <Link
+          href={"/login"}
+          className="font-countach italic text-white hover:text-green-500 transition duration-300 px-3 py-2"
+        >
+          Login
+        </Link>
+        ) : (
+          <UserButton user={session?.user} />
+        )}
+
+          <Link href="https://tiltify.com/+borderlands-community/the-hunt-prepare-for-mayhem" target="_blank" rel="noopener noreferrer">
             <Button className="bg-[#BBFE17] hover:bg-[#BBFE17]/75 cursor-pointer text-black">
               Donate
             </Button>
