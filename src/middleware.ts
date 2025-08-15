@@ -1,67 +1,64 @@
 import { getSessionCookie } from "better-auth/cookies";
-
-import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
-  // Get session from auth
-  const session = await auth.api.getSession({
-    headers: request.headers,
-  });
+  const sessionCookie = getSessionCookie(request);
 
   // Define route patterns
-  const isAuthPage = pathname.startsWith("/login");
+  const isAuthPage =
+    pathname.startsWith("/login") || pathname.startsWith("/register");
   const isDashboardPage = pathname.startsWith("/dashboard");
   const isAdminPage = pathname.startsWith("/admin");
-  const isPublicApiRoute =
-    pathname.startsWith("/api/auth") ||
-    pathname.startsWith("/api/trpc") ||
-    pathname.startsWith("/api/public");
-
-  // Allow public API routes
-  if (isPublicApiRoute) {
-    return NextResponse.next();
-  }
 
   // Redirect authenticated users away from auth pages
-  if (isAuthPage && session?.user) {
+  if (isAuthPage && sessionCookie) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   // Protect dashboard routes - require authentication
-  if (isDashboardPage) {
-    if (!session?.user) {
-      const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("redirect", pathname);
-      return NextResponse.redirect(loginUrl);
-    }
-    return NextResponse.next();
+  if (isDashboardPage && !sessionCookie) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
-  // Protect admin routes - require admin role
-  if (isAdminPage) {
-    if (!session?.user) {
-      const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("redirect", pathname);
-      return NextResponse.redirect(loginUrl);
-    }
-
-    const userRole = session.user.role || "Participant";
-
-    if (userRole !== "ADMIN" && userRole !== "Admin") {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-
-    const sessionCookie = getSessionCookie(request);
-
-    if (!sessionCookie) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-
-    return NextResponse.next();
+  // Protect admin routes - require authentication
+  // (role check will be handled at page/component level)
+  if (isAdminPage && !sessionCookie) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(loginUrl);
   }
+
+  // Add security headers for all responses
+  const response = NextResponse.next();
+
+  // Security headers
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("X-XSS-Protection", "1; mode=block");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+
+  // CSP header (adjust based on your needs)
+  const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    img-src 'self' blob: data: https: http:;
+    font-src 'self' https://fonts.gstatic.com;
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    upgrade-insecure-requests;
+  `
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
+  response.headers.set("Content-Security-Policy", cspHeader);
+
+  return response;
 }
 
 export const config = {
@@ -72,7 +69,8 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public folder
+     * - api routes (handled by their own auth)
      */
-    "/((?!_next/static|_next/image|favicon.ico|public/).*)",
+    "/((?!_next/static|_next/image|favicon.ico|public/|api/).*)",
   ],
 };

@@ -34,8 +34,6 @@ export default function ProfileCollection({ user }: Props) {
     error: userProgressError,
   } = api.item.getUserProgress.useQuery(undefined);
 
-  console.log("Progress", userProgress);
-
   if (progressLoading || userProgressLoading) {
     return (
       <div className="min-h-screen w-full relative">

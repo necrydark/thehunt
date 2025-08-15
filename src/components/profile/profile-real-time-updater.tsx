@@ -36,7 +36,6 @@ export default function ProfileRealtimeUpdater({
           filter: `id=eq.${initialData.id}`,
         },
         (payload: any) => {
-          console.log("User update received:", payload);
           if (payload.new.totalPoints !== profileData.totalPoints) {
             setProfileData((prev) => ({
               ...prev,
@@ -58,7 +57,6 @@ export default function ProfileRealtimeUpdater({
           filter: `userId=eq.${initialData.id}`,
         },
         async (payload: any) => {
-          console.log("UserItem insert received:", payload);
           const newItemId = payload.new.itemId;
           const { data: itemData, error: itemError } = await supabase
             .from("item")
