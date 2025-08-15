@@ -1,78 +1,92 @@
 import { getUser } from "@/actions/user";
-import { Badge } from "@/components/ui/badge";
+import ProfileHeader from "@/components/profile/profile-header";
+import ProfileRealTimeUpdater from "@/components/profile/profile-real-time-updater";
+import ProfileTabs from "@/components/profile/profile-tabs";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Twitch } from "lucide-react";
-import Image from "next/image";
+import { getAllUserItems } from "@/data/profile";
+import { Item, UserItem } from "@prisma/client";
 import Link from "next/link";
 
-type Params = Promise<{slug: string}>
+interface UserProfileData {
+  id: string;
+  name: string;
+  image: string | null;
+  totalPoints: number;
+  obtainedItems: (UserItem & { item: Item })[];
+  // Add other user fields you want to display
+}
 
-export default async function ProfilePage({ params }: {params: Params}) {
-  const {slug} = await params;
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+
   const user = await getUser(slug);
-  if(!user) {
+
+  return {
+    title: `${user?.name}'s Profile`,
+    description: `View the profile and activity of ${user?.name}`,
+  };
+}
+// User Profile for other users to visit and see
+
+export default async function ProfilePage({ params }: Props) {
+  const { slug } = await params;
+  const user = await getUser(slug);
+  // const items = await getAllItems();
+  const unlocks = await getAllUserItems(slug);
+
+  if (!user) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center">
         <h1>oops... user not found!</h1>
-          <Link href={"/"}>
-        <Button>
-          Go Back
-        </Button>
-          </Link>
+        <Link href={"/"}>
+          <Button>Go Back</Button>
+        </Link>
       </div>
-    )
+    );
   }
+
+  const initialUserData: UserProfileData = {
+    id: user.id,
+    name: user.name,
+    image: user.image,
+    totalPoints: user.totalPoints ?? 0,
+    obtainedItems: unlocks?.userItems ?? [],
+  };
   return (
     <div className="min-h-screen w-full relative">
-    <div
-      className="absolute inset-0 z-0"
-      style={{
-        background:
-          "radial-gradient(125% 125% at 50% 90%, #000000 40%, #072607 100%)",
-      }}
-    />
-  <div className="h-full w-full relative z-10">
-      <div className="container relative max-w-[1200px] mx-auto px-4  pt-[15rem] pb-[5rem]">
-        <Card className="h-[1200px] bg-gradient-to-br from-green-800 shadow-lg shadow-[#BBFE17]/50 overflow-hidden border-2 border-[#BBFE17] to-80% to-black">
-        <div className="flex lg:flex-row flex-col space-x-4 justify-between px-8">
-          {/* Image / Name */}
-          <div className="flex  md:flex-row flex-col justify-center items-center h-fit gap-2">
-            <Image 
-            src={user?.image as string}
-            alt={`${user?.name}'s Profile Image`}
-            width={150}
-            height={150}
-            className="overflow-hidden rounded-full border-2 border-[#BBFE17] "
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(125% 125% at 50% 90%, #000000 40%, #072607 100%)",
+        }}
+      />
+      <div className="h-full w-full relative z-10">
+        <div className="container relative max-w-[1200px] mx-auto px-4  pt-[15rem] pb-[5rem]">
+          <ProfileHeader
+            user={{
+              ...user,
+              role: user.role,
+              totalPoints: user.totalPoints as number,
+            }}
+          />
+          {/* Checklist */}
+          <section className="mt-8 w-full">
+            <ProfileTabs
+              user={{
+                ...user,
+                totalPoints: user.totalPoints as number,
+                role: user.role,
+              }}
             />
-            <div className="flex flex-col md:items-start items-center lg:pb-0 pb-[2rem] space-y-2">
-            <h1 className="text-3xl font-bold  text-[#BBFE17] ">{user?.name}</h1>
-            <Badge>{user?.role}</Badge>
-            <p className="text-white">Points: {user?.totalPoints}</p>
-            <p className="text-white">Joined The Hunt {user?.createdAt.toLocaleDateString()}</p>
-            <Link href={`https://www.twitch.tv/${user?.name}`}
-            target="_blank" rel="noopener noreferrer">
-              <Button className="bg-[#9146FF] w-full hover:bg-[#9146FF]/75 cursor-pointer duration-300 transition-all sm:w-auto">
-              <Twitch className="mr-2 w-4 h-4 justify-center text-white" />
-              View On Twitch
-            </Button>
-            </Link>
-            </div>
-          </div>
-          {/* Iframe for stream */}
-          <div className="flex justify-center items-center">
-            <iframe 
-            src={`https://player.twitch.tv/?channel=${user?.name}&parent=localhost&muted=true&autoplay=false`}
-            allowFullScreen
-            width={"450"}
-            height={"450"}
-            scrolling="no"
-            />
-          </div>
+          </section>
         </div>
-        </Card>
       </div>
-  </div>
+      <ProfileRealTimeUpdater initialData={initialUserData} />
     </div>
-  )
+  );
 }

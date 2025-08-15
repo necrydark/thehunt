@@ -58,15 +58,15 @@
 //                         className="object-[unset] w-full h-full"
 //                       />
 //                     </div>
-//                     <h3 className="font-bold text-[#BBFE17] text-[1.75rem] mb-2 tracking-wider">{item.title}</h3>
+//                     <h3 className="font-bold text-primary text-[1.75rem] mb-2 tracking-wider">{item.title}</h3>
 //                     <p className="text-[16px]">{item.subtext}</p>
 //                   </div>
 //                 </div>
 //               </CarouselItem>
 //             ))}
 //           </CarouselContent>
-//           <CarouselPrevious className="absolute hidden left-[-70px] top-1/2 -translate-y-1/2 bg-gray-800 text-[#BBFE17] border-0 rounded-full w-12 h-12 md:flex items-center justify-center shadow-lg hover:bg-[#BBFE17] hover:text-black transition-colors duration-200" />
-//           <CarouselNext className="absolute hidden right-[-70px] top-1/2 -translate-y-1/2 bg-gray-800 text-[#BBFE17] border-0 rounded-full w-12 h-12 md:flex items-center justify-center shadow-lg hover:bg-[#BBFE17] hover:text-black transition-colors duration-200" />
+//           <CarouselPrevious className="absolute hidden left-[-70px] top-1/2 -translate-y-1/2 bg-gray-800 text-primary border-0 rounded-full w-12 h-12 md:flex items-center justify-center shadow-lg hover:bg-[#BBFE17] hover:text-black transition-colors duration-200" />
+//           <CarouselNext className="absolute hidden right-[-70px] top-1/2 -translate-y-1/2 bg-gray-800 text-primary border-0 rounded-full w-12 h-12 md:flex items-center justify-center shadow-lg hover:bg-[#BBFE17] hover:text-black transition-colors duration-200" />
 //         </Carousel>
 //       </div>
 //     </section>
@@ -131,15 +131,15 @@ const Carousels = () => {
                           className="object-cover w-full h-full"
                         />
                       </div>
-                      <h3 className="font-bold text-[#BBFE17] text-[1.75rem] mb-2 tracking-wider">{item.title}</h3>
+                      <h3 className="font-bold text-primary-green text-[1.75rem] mb-2 tracking-wider">{item.title}</h3>
                       <p className="text-[16px]">{item.subtext}</p>
                     </div>
                   </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="absolute hidden left-[-70px] top-1/2 -translate-y-1/2 bg-gray-800 text-[#BBFE17] border-0 rounded-full w-12 h-12 md:flex items-center justify-center shadow-lg hover:bg-[#BBFE17] hover:text-black transition-colors duration-200" />
-            <CarouselNext className="absolute hidden right-[-70px] top-1/2 -translate-y-1/2 bg-gray-800 text-[#BBFE17] border-0 rounded-full w-12 h-12 md:flex items-center justify-center shadow-lg hover:bg-[#BBFE17] hover:text-black transition-colors duration-200" />
+            <CarouselPrevious className="absolute hidden left-[-70px] top-1/2 text-primary-green -translate-y-1/2 bg-gray-800  border-0 rounded-full w-12 h-12 md:flex items-center justify-center shadow-lg hover:bg-[#BBFE17] hover:text-black transition-colors duration-200" />
+            <CarouselNext className="absolute hidden right-[-70px] top-1/2  -translate-y-1/2 bg-gray-800 text-primary-green border-0 rounded-full w-12 h-12 md:flex items-center justify-center shadow-lg hover:bg-[#BBFE17] hover:text-black transition-colors duration-200" />
           </Carousel>
         </div>
       </section>

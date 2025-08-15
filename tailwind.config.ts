@@ -13,6 +13,9 @@ module.exports = {
       fontFamily: {
         countach: ['Countach', 'sans-serif'],
       },
+      colors: {
+        'primary-green': '#bbfe17',
+      },
     },
   },
   plugins: [],

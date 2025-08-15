@@ -13,6 +13,7 @@ export const auth = betterAuth({
         twitch: {
             clientId: process.env.TWITCH_CLIENT_ID as string,
             clientSecret: process.env.TWITCH_CLIENT_SECRET as string,
+            scope: ['user:read:email', "clips:edit"]
         }
     },
     user: {

@@ -9,7 +9,7 @@ export default function LoginForm() {
   const signInWithTwitch = async () => {
     await authClient.signIn.social({
       provider: "twitch",
-      callbackURL: "/"
+      callbackURL: "/dashboard"
     })
   }
 
