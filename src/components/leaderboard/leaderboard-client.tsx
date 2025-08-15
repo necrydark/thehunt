@@ -23,6 +23,7 @@ import {
   Trophy,
   Users,
 } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const ITEMS_PER_PAGE = 20;
@@ -311,9 +312,14 @@ export default function LeaderboardPage() {
                   {/* User Info */}
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold">
-                        {user.name || "Anonymous"}
-                      </h3>
+                      <Link
+                        href={`/profile/${user.name}`}
+                        className="underline"
+                      >
+                        <h3 className="font-semibold">
+                          {user.name || "Anonymous"}
+                        </h3>
+                      </Link>
                       {user.rank <= 3 && <>{getRankBadge(user.rank)}</>}
                     </div>
                     <div className="flex items-center gap-4 text-sm text-gray-400">

@@ -129,4 +129,45 @@ export const userRouter = router({
       rejectedSubmissions,
     };
   }),
+
+  getPublicStats: publicProcedure
+    .input(
+      z.object({
+        username: z.string(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const user = await ctx.db.user.findUnique({
+        where: { name: input.username },
+        select: {
+          id: true,
+          name: true,
+          totalPoints: true,
+          image: true,
+          createdAt: true,
+          _count: {
+            select: {
+              submissions: {
+                where: { status: "APPROVED" },
+              },
+              userItems: true,
+            },
+          },
+          submissions: {
+            where: { status: "APPROVED" },
+            select: { status: true },
+          },
+        },
+      });
+
+      if (!user) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+      }
+
+      return {
+        totalPoints: user.totalPoints || 0,
+        itemsObtained: user._count.userItems,
+        approvedSubmissions: user._count.submissions,
+      };
+    }),
 });

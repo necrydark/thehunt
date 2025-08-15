@@ -14,7 +14,9 @@ export default function ProfileStats({ user }: Props) {
     data: progress,
     isLoading: progressLoading,
     error: progressError,
-  } = api.user.getStats.useQuery(undefined, { enabled: !!user });
+  } = api.user.getPublicStats.useQuery({
+    username: user.name,
+  });
   const {
     data: items,
     isLoading: itemsLoading,
