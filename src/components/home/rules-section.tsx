@@ -44,7 +44,7 @@ function RichText({ segments }: { segments?: RichTextSegment[] }) {
               href={segment.href}
               target="_blank"
               rel="noopener noreferrer"
-              className={cn("text-[#BBFE17] hover:underline", segment.className)}
+              className={cn("text-primary-green hover:underline", segment.className)}
             >
               {segment.text}
             </a>
@@ -153,7 +153,7 @@ export default function RulesSection() {
                 {
                   segments: [
                     { text: "Join the Borderlands Community Team on " },
-                    { text: "Tiltify", href: "https://tiltify.com/team-invite/CBcyLY1TRyBxwYJi7fKnKpp",  className: "text-[#BBFE17] hover:underline", },
+                    { text: "Tiltify", href: "https://tiltify.com/team-invite/CBcyLY1TRyBxwYJi7fKnKpp",  className: "text-primary-green hover:underline", },
                     { text: "." },
                   ],
                 },
@@ -163,7 +163,7 @@ export default function RulesSection() {
                       text: "Create a campaign supporting the ",
                     },
                     {
-                      text: "team campaign on Tiltify.", href: "https://tiltify.com/+borderlands-community/the-hunt-prepare-for-mayhem", className: "text-[#BBFE17] hover:underline",
+                      text: "team campaign on Tiltify.", href: "https://tiltify.com/+borderlands-community/the-hunt-prepare-for-mayhem", className: "text-primary-green hover:underline",
                     }
                   ],
                 },
@@ -751,7 +751,7 @@ export default function RulesSection() {
       <div className="container mx-auto max-w-4xl">
         <Accordion type="single" collapsible className="w-full" defaultValue="what-is-the-hunt">
           <AccordionItem value="what-is-the-hunt">
-        <AccordionTrigger className="text-left text-xl font-semibold text-white hover:no-underline data-[state=open]:text-[#BBFE17]">What Is The Hunt?</AccordionTrigger>
+        <AccordionTrigger className="text-left text-xl font-semibold text-white hover:no-underline data-[state=open]:text-primary-green">What Is The Hunt?</AccordionTrigger>
           <AccordionContent>
                <div className="mb-10">
           <p className="mb-4 text-white">
@@ -791,7 +791,7 @@ export default function RulesSection() {
           </AccordionContent>
           </AccordionItem>
           <AccordionItem value="event-dates">
-        <AccordionTrigger className="text-left text-xl font-semibold text-white hover:no-underline data-[state=open]:text-[#BBFE17]">Event Dates</AccordionTrigger>
+        <AccordionTrigger className="text-left text-xl font-semibold text-white hover:no-underline data-[state=open]:text-primary-green">Event Dates</AccordionTrigger>
           <AccordionContent>
                <div className="mb-10">
           <p className="mb-4 text-white">
@@ -806,7 +806,7 @@ export default function RulesSection() {
           </AccordionItem>
           {rulesData.map((rule) => (
             <AccordionItem key={rule.id} value={rule.id} className="border-b border-gray-700">
-              <AccordionTrigger className="text-left text-xl font-semibold text-white hover:no-underline data-[state=open]:text-[#BBFE17]">
+              <AccordionTrigger className="text-left text-xl font-semibold text-white hover:no-underline data-[state=open]:text-primary-green">
                 {rule.title}
               </AccordionTrigger>
               <AccordionContent className="p-4  rounded-b-md">
