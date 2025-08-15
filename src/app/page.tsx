@@ -1,4 +1,3 @@
-
 // import { Hero } from "@/components/hero";
 // import Carousels from "@/components/home/carousels";
 // import RulesSection from "@/components/home/rules-section";
@@ -12,14 +11,11 @@
 // import Image from "next/image";
 // import Link from "next/link";
 
-
-
 // export default async function Home() {
 
 //   // const session = await auth.api.getSession({
 //   //   headers: await headers()
 //   // })
-
 
 //   return (
 //     <div className="min-h-screen w-full relative">
@@ -44,8 +40,8 @@
 //                 <h2 className="text-white font-bold text-2xl">Get Started</h2>
 //                 <p className="text-white ">  <Link href={"/login"} className="text-primary-green hover:underline">
 //                   {" "}Register
-//                   </Link> your account to get started. 
-                
+//                   </Link> your account to get started.
+
 //                 </p>
 //               </div>
 //             </div>
@@ -78,14 +74,14 @@
 //         }}
 //       />
 //       <section className="w-full bg-gradient-to-b  via-black to-[#072607] relative">
-        
+
 //         <div className="container max-w-6xl mx-auto flex flex-col gap-6 justify-center items-center  relative p-[4rem] z-10">
 //           <h1 className="text-4xl font-bold text-primary-green mb-4">Join the cause</h1>
 //           <div className="grid md:grid-cols-2 grid-cols-1 justify-items-center gap-2">
 //             <Image
 //             src={"/vault-hunters-bl2.jpeg"}
 //             alt="Picture of the Vault Hunters on a bridge shooting enemies"
-//             width={500} 
+//             width={500}
 //             height={500}
 //             priority
 //             />
@@ -106,7 +102,7 @@
 //           />
 //           <div className="flex gap-2 items-center justify-center mt-2">
 //           <h2 className="text-3xl font-bold text-primary-green">Raised</h2>
-//           <p className="text-[#E80063] text-2xl italic">$514<span className="text-xl">k</span></p>   
+//           <p className="text-[#E80063] text-2xl italic">$514<span className="text-xl">k</span></p>
 //           </div>
 //             </div>
 //             <div>
@@ -120,7 +116,7 @@
 //           />
 //           <div className="flex gap-2 items-center justify-center mt-2">
 //           <h2 className="text-3xl font-bold text-primary-green">Raised</h2>
-//           <p className="text-[#E80063] text-2xl italic">$0</p>   
+//           <p className="text-[#E80063] text-2xl italic">$0</p>
 //           </div>
 //             </div>
 //           </div>
@@ -132,7 +128,7 @@
 
 //           <div className="pt-8 flex flex-col justify-center items-center">
 //           <h1 className="text-4xl font-bold text-primary-green text-center mb-10">Assets</h1>
-//           <Image 
+//           <Image
 //           src={"/overlay-example.webp"}
 //           width={600}
 //           height={600}
@@ -147,7 +143,7 @@
 //             </Button>
 //           </Link>
 //           </div>
-//         </div>  
+//         </div>
 //       </section>
 
 //       {/* Cards */}
@@ -159,7 +155,7 @@
 //                 <Card key={idx} className="group hover:shadow-lg bg-black border-[#BBFE17] shadow-lg shadow-[#BBFE17]/50 !py-0 transition-shadow duration-300 overflow-hidden h-full flex flex-col">
 //                   <CardContent className="p-0 flex-1 flex h-80 bg-black flex-col">
 //                     <div className="relative overflow-hidden ">
-//                       <Image 
+//                       <Image
 //                       src={prev.image}
 //                       alt={prev.name as string}
 //                       width={259}
@@ -192,19 +188,18 @@
 //   );
 // }
 
-
-import { Hero } from "@/components/hero"
-import Carousels from "@/components/home/carousels"
-import RulesSection from "@/components/home/rules-section"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { previous } from "@/data/data"
+import { Hero } from "@/components/hero";
+import Carousels from "@/components/home/carousels";
+import RulesSection from "@/components/home/rules-section";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { previous } from "@/data/data";
 // import { auth } from "@/lib/auth";
-import { Calendar } from "lucide-react"
+import { Calendar } from "lucide-react";
 // import { headers } from "next/headers";
-import Image from "next/image"
-import Link from "next/link"
+import Image from "next/image";
+import Link from "next/link";
 
 export default async function Home() {
   // const session = await auth.api.getSession({
@@ -216,16 +211,23 @@ export default async function Home() {
       <div
         className="absolute inset-0 z-0"
         style={{
-          background: "radial-gradient(125% 125% at 50% 90%, #000000 40%, #072607 100%)",
+          background:
+            "radial-gradient(125% 125% at 50% 90%, #000000 40%, #072607 100%)",
         }}
       />
       <Hero />
       {/* How To Participate */}
-      <section className="container max-w-6xl relative z-10 mx-auto pt-[9rem] px-4" id="how-to-participate">
+      <section
+        className="container max-w-6xl relative z-10 mx-auto pt-[9rem] px-4"
+        id="how-to-participate"
+      >
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold uppercase text-[#BBFE17] mb-4">How To Participate</h1>
+          <h1 className="text-5xl font-bold uppercase text-[#BBFE17] mb-4">
+            How To Participate
+          </h1>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            If you&apos;re new here, check out how to join along in all the mayhem!
+            If you&apos;re new here, check out how to join along in all the
+            mayhem!
           </p>
         </div>
 
@@ -235,12 +237,18 @@ export default async function Home() {
               <div className="bg-gradient-to-br from-[#BBFE17] to-[#9FE317] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 text-black text-2xl font-bold group-hover:scale-110 transition-transform duration-300">
                 1
               </div>
-              <h2 className="text-white font-bold text-2xl mb-4">Get Started</h2>
+              <h2 className="text-white font-bold text-2xl mb-4">
+                Get Started
+              </h2>
               <p className="text-gray-300 leading-relaxed">
-                <Link href={"/login"} className="text-[#BBFE17] hover:underline font-semibold">
+                <Link
+                  href={"/login"}
+                  className="text-[#BBFE17] hover:underline font-semibold"
+                >
                   Register
                 </Link>{" "}
-                your account to get started and join the hunt for legendary loot.
+                your account to get started and join the hunt for legendary
+                loot.
               </p>
             </CardContent>
           </Card>
@@ -250,9 +258,12 @@ export default async function Home() {
               <div className="bg-gradient-to-br from-[#BBFE17] to-[#9FE317] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 text-black text-2xl font-bold group-hover:scale-110 transition-transform duration-300">
                 2
               </div>
-              <h2 className="text-white font-bold text-2xl mb-4">Stream Your Run</h2>
+              <h2 className="text-white font-bold text-2xl mb-4">
+                Stream Your Run
+              </h2>
               <p className="text-gray-300 leading-relaxed">
-                Stream the entirety of your run on Twitch or YouTube for verification and community engagement.
+                Stream the entirety of your run on Twitch or YouTube for
+                verification and community engagement.
               </p>
             </CardContent>
           </Card>
@@ -262,10 +273,15 @@ export default async function Home() {
               <div className="bg-gradient-to-br from-[#BBFE17] to-[#9FE317] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 text-black text-2xl font-bold group-hover:scale-110 transition-transform duration-300">
                 3
               </div>
-              <h2 className="text-white font-bold text-2xl mb-4">Climb the Ranks</h2>
+              <h2 className="text-white font-bold text-2xl mb-4">
+                Climb the Ranks
+              </h2>
               <p className="text-gray-300 leading-relaxed">
-                Accumulate Points <span className="text-xs italic text-[#BBFE17]">(in Joltz&apos;s voice)</span> and rank
-                high on the scoreboard.
+                Accumulate Points{" "}
+                <span className="text-xs italic text-[#BBFE17]">
+                  (in Joltz&apos;s voice)
+                </span>{" "}
+                and rank high on the scoreboard.
               </p>
             </CardContent>
           </Card>
@@ -275,16 +291,20 @@ export default async function Home() {
       <div
         className="absolute inset-0 z-0"
         style={{
-          background: "radial-gradient(125% 125% at 50% 90%, #000000 40%, #072607 100%)",
+          background:
+            "radial-gradient(125% 125% at 50% 90%, #000000 40%, #072607 100%)",
         }}
       />
       <section className="w-full bg-gradient-to-b via-black to-[#072607] relative">
         <div className="container max-w-6xl mx-auto relative p-16 z-10">
           <div className="text-center mb-16">
-            <h1 className="text-5xl font-bold text-[#BBFE17] mb-6">Join the Cause</h1>
+            <h1 className="text-5xl font-bold text-[#BBFE17] mb-6">
+              Join the Cause
+            </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              The Borderlands Community unites for the ultimate gaming scavenger hunt while raising funds for St. Jude
-              Children&apos;s Research Hospital.
+              The Borderlands Community unites for the ultimate gaming scavenger
+              hunt while raising funds for St. Jude Children&apos;s Research
+              Hospital.
             </p>
           </div>
 
@@ -305,13 +325,20 @@ export default async function Home() {
                 Raising Money for the Kids, One Bounty at a Time
               </h2>
               <p className="text-gray-300 text-lg leading-relaxed">
-                Vault Hunters race to loot the rarest items in the game. The player who completes the list in the
-                shortest time from new character creation will be crowned the Champion!
+                Vault Hunters race to loot the rarest items in the game. The
+                player who completes the list in the shortest time from new
+                character creation will be crowned the Champion!
               </p>
               <div className="flex flex-wrap gap-4">
-                <Badge className="bg-[#BBFE17]/20 text-[#BBFE17] border-[#BBFE17]/30 px-4 py-2">Charity Event</Badge>
-                <Badge className="bg-[#BBFE17]/20 text-[#BBFE17] border-[#BBFE17]/30 px-4 py-2">Community Driven</Badge>
-                <Badge className="bg-[#BBFE17]/20 text-[#BBFE17] border-[#BBFE17]/30 px-4 py-2">Competitive</Badge>
+                <Badge className="bg-[#BBFE17]/20 text-[#BBFE17] border-[#BBFE17]/30 px-4 py-2">
+                  Charity Event
+                </Badge>
+                <Badge className="bg-[#BBFE17]/20 text-[#BBFE17] border-[#BBFE17]/30 px-4 py-2">
+                  Community Driven
+                </Badge>
+                <Badge className="bg-[#BBFE17]/20 text-[#BBFE17] border-[#BBFE17]/30 px-4 py-2">
+                  Competitive
+                </Badge>
               </div>
             </div>
           </div>
@@ -328,7 +355,9 @@ export default async function Home() {
                   className="mx-auto mb-6 hover:scale-110 transition-transform duration-300"
                 />
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-[#BBFE17]">Community Total</h3>
+                  <h3 className="text-2xl font-bold text-[#BBFE17]">
+                    Community Total
+                  </h3>
                   <p className="text-4xl font-bold text-[#E80063]">
                     $514<span className="text-2xl">k</span>
                   </p>
@@ -348,7 +377,9 @@ export default async function Home() {
                   className="mx-auto mb-6 hover:scale-110 transition-transform duration-300"
                 />
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-[#BBFE17]">This Event</h3>
+                  <h3 className="text-2xl font-bold text-[#BBFE17]">
+                    This Event
+                  </h3>
                   <p className="text-4xl font-bold text-[#E80063]">$0</p>
                   <p className="text-gray-400">Let&apos;s change this!</p>
                 </div>
@@ -364,9 +395,13 @@ export default async function Home() {
             </Link>
           </div>
 
-          <div className="pt-20 text-center">
-            <h2 className="text-4xl font-bold text-[#BBFE17] mb-6">Stream Assets</h2>
-            <p className="text-gray-300 mb-12 text-lg">Professional overlays to enhance your streaming experience</p>
+          <div className="pt-20 text-center" id="assets">
+            <h2 className="text-4xl font-bold text-[#BBFE17] mb-6">
+              Stream Assets
+            </h2>
+            <p className="text-gray-300 mb-12 text-lg">
+              Professional overlays to enhance your streaming experience
+            </p>
 
             <Card className="bg-black/40 backdrop-blur-sm border-[#BBFE17]/30 hover:border-[#BBFE17] transition-all duration-300 hover:shadow-lg hover:shadow-[#BBFE17]/20 max-w-4xl mx-auto">
               <CardContent className="p-8">
@@ -380,8 +415,12 @@ export default async function Home() {
                     className="relative rounded-lg shadow-xl group-hover:scale-105 transition-transform duration-300 mx-auto"
                   />
                 </div>
-                <h3 className="text-3xl font-bold text-[#BBFE17] mb-2">Professional Stream Overlay</h3>
-                <p className="text-gray-400 mb-6">Created by PilotPlays Games</p>
+                <h3 className="text-3xl font-bold text-[#BBFE17] mb-2">
+                  Professional Stream Overlay
+                </h3>
+                <p className="text-gray-400 mb-6">
+                  Created by PilotPlays Games
+                </p>
                 <Link href={"/obs-overlay.zip"}>
                   <Button className="bg-gradient-to-r from-[#BBFE17] to-[#9FE317] hover:from-[#9FE317] hover:to-[#BBFE17] text-black font-bold px-8 py-4 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                     Download Assets
@@ -396,9 +435,12 @@ export default async function Home() {
       <section className="w-full relative bg-gradient-to-t from-[0%] from-[#072607] via-black via-[40%] to-[#072607]">
         <div className="py-24">
           <div className="text-center mb-16">
-            <h1 className="text-5xl font-bold text-[#BBFE17] mb-4">Not Our First Rodeo</h1>
+            <h1 className="text-5xl font-bold text-[#BBFE17] mb-4">
+              Not Our First Rodeo
+            </h1>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Our community has a proven track record of successful charity events
+              Our community has a proven track record of successful charity
+              events
             </p>
           </div>
 
@@ -423,9 +465,13 @@ export default async function Home() {
                     </Badge>
                   </div>
                   <div className="flex-1 flex flex-col justify-center items-center p-8 space-y-4">
-                    <h3 className="text-2xl font-bold text-[#BBFE17] text-center">{prev.name}</h3>
+                    <h3 className="text-2xl font-bold text-[#BBFE17] text-center">
+                      {prev.name}
+                    </h3>
                     <div className="text-center space-y-2">
-                      <p className="text-2xl font-bold text-[#E80063]">${prev.raised}</p>
+                      <p className="text-2xl font-bold text-[#E80063]">
+                        ${prev.raised}
+                      </p>
                       <p className="text-gray-400">Raised for Charity</p>
                     </div>
                     <div className="flex items-center text-gray-300 bg-black/40 rounded-full px-4 py-2">
@@ -441,13 +487,20 @@ export default async function Home() {
       </section>
 
       {/* Rules */}
-      <section className="w-full bg-gradient-to-b via-black from-[#072607] to-black relative" id="rules">
+      <section
+        className="w-full bg-gradient-to-b via-black from-[#072607] to-black relative"
+        id="rules"
+      >
         <div className="container max-w-7xl py-20 mx-auto">
-          <h1 className="text-center text-[#BBFE17] font-bold text-4xl">Official BL3 Hunt 2025 Rules</h1>
-          <p className="text-xl text-gray-300 text-center mt-2">Subject to update, but to be strictly followed</p>
+          <h1 className="text-center text-[#BBFE17] font-bold text-4xl">
+            Official BL3 Hunt 2025 Rules
+          </h1>
+          <p className="text-xl text-gray-300 text-center mt-2">
+            Subject to update, but to be strictly followed
+          </p>
           <RulesSection />
         </div>
       </section>
     </div>
-  )
+  );
 }

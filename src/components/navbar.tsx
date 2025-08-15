@@ -1,185 +1,46 @@
-// "use client"
+"use client";
 
-// import { authClient } from "@/lib/auth-client";
-// import { Menu, X } from "lucide-react";
-// import { motion } from "motion/react";
-// import Image from "next/image";
-// import Link from "next/link";
-// import { useEffect, useState } from "react";
-// import { MotionLink } from "./motion-comps";
-// import { Button } from "./ui/button";
-// import UserButton from "./user-button";
-
-// const links = [
-//   { name: "Home", url: "/" },
-//   { name: "Rules", url: "#rules" },
-//   { name: "Assets", url: "#assets" },
-//   { name: "Merch", url: "https://www.bonfire.com/store/borderlands-community-fundraising-team/" },
-// ];
-
-// const Navbar = () => {
-//   const [isMenuOpen, setIsMenuOpen] = useState(false);
-//   const [isScrolled, setIsScrolled] = useState(false);
-
-//       const { 
-//         data: session, 
-//     } = authClient.useSession() 
-
-
-//   useEffect(() => {
-//     const handleScroll = () => {
-//       const offset = window.scrollY;
-//       setIsScrolled(offset > 50); // Change 50 to whatever threshold you want
-//     };
-
-//     window.addEventListener('scroll', handleScroll);
-    
-//     return () => window.removeEventListener('scroll', handleScroll);
-//   }, []);
-
-//   const handleResize = () => {
-//     if (window.innerWidth > 768) setIsMenuOpen(false);
-//   };
-
-//   useEffect(() => {
-//     window.addEventListener("resize", handleResize);
-//     return () => window.removeEventListener("resize", handleResize);
-//   });
-
-
-//   console.log("Session", session)
-
-
-//   return (
-//     <header className={`w-full fixed border-b-[1px] border-b-green-950/75 transition-all duration-300 z-50 ${isScrolled ? "bg-[#072607]" : "md:bg-transparent bg-[#072607]"}`}>
-//       <nav className="max-w-[1280px] mx-auto flex justify-between items-center px-4 py-3"> 
-//         {/* Logo */}
-//         <Link href="/" className="flex items-center p-2 hover:opacity-75 transition">
-//           <Image
-//             priority
-//             width={75}
-//             height={50}
-//             alt="Borderlands Community Fundraising Team Logo"
-//             src="/bl-community.png"
-//           />
-//         </Link>
-
-//         {/* Desktop Nav */}
-//         <div className="hidden sm:flex items-center gap-4">
-//           {links.map((link) => (
-//             <Link
-//               key={link.name}
-//               href={link.url}
-//               className="font-countach italic text-white hover:text-green-500 transition duration-300 px-3 py-2"
-//             >
-//               {link.name}
-//             </Link>
-//           ))}
-
-//         {!session ? (
-//           <Link
-//           href={"/login"}
-//           className="font-countach italic text-white hover:text-green-500 transition duration-300 px-3 py-2"
-//         >
-//           Login
-//         </Link>
-//         ) : (
-//           <UserButton user={session?.user} />
-//         )}
-
-//           <Link href="https://tiltify.com/+borderlands-community/the-hunt-prepare-for-mayhem" target="_blank" rel="noopener noreferrer">
-//             <Button className="bg-[#BBFE17] hover:bg-[#BBFE17]/75 cursor-pointer text-black">
-//               Donate
-//             </Button>
-//           </Link>
-//         </div>
-
-//         {/* Mobile Toggle */}
-//         <div className="sm:hidden flex items-center">
-//           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white">
-//             {isMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
-//           </button>
-//         </div>
-//       </nav>
-
-//       {/* Mobile Menu */}
-//       {isMenuOpen && (
-//         <motion.div 
-//         initial={{ height: 0}}
-//         animate={{ height: 215}}
-//         className="sm:hidden bg-[#072607] px-4 pb-4 space-y-4">
-//           {links.map((link, idx) => (
-//             <MotionLink
-//             initial={{opacity: 0}}
-//             animate={{opacity: 1}}
-//             transition={{ duration: .2 * idx}}
-//               key={link.name}
-//               href={link.url}
-//               onClick={() => setIsMenuOpen(false)}
-//               className="block font-countach italic text-white hover:text-green-500 transition"
-//             >
-//               {link.name}
-//             </MotionLink>
-//           ))}
-//           <MotionLink  
-//              initial={{opacity: 0}}
-//              animate={{opacity: 1}}
-//              transition={{ duration: .8}}
-//           href="#" onClick={() => setIsMenuOpen(false)}>
-//             <Button className="w-full bg-[#BBFE17] hover:bg-[#BBFE17]/75 text-white">
-//               Donate
-//             </Button>
-//           </MotionLink>
-//         </motion.div>
-//       )}
-//     </header>
-//   );
-// };
-
-// export default Navbar;
-
-
-"use client"
-
-import { Menu, X } from "lucide-react"
-import { motion } from "motion/react"
-import Image from "next/image"
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import { Button } from "./ui/button"
-import UserButton from "./user-button"
+import { Menu, X } from "lucide-react";
+import { motion } from "motion/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
+import UserButton from "./user-button";
 
 const links = [
   { name: "Home", url: "/" },
-  { name: "Rules", url: "#rules" },
-  { name: "Assets", url: "#assets" },
-  { name: "Leaderboard", url: "/leaderboard"},
-  { name: "Merch", url: "https://www.bonfire.com/store/borderlands-community-fundraising-team/" },
-]
+  { name: "Rules", url: "https://thehunt-virid.vercel.app/#rules" },
+  { name: "Assets", url: "https://thehunt-virid.vercel.app/#assets" },
+  { name: "Leaderboard", url: "/leaderboard" },
+  {
+    name: "Merch",
+    url: "https://www.bonfire.com/store/borderlands-community-fundraising-team/",
+  },
+];
 
 export const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const offset = window.scrollY
-      setIsScrolled(offset > 50)
-    }
+      const offset = window.scrollY;
+      setIsScrolled(offset > 50);
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleResize = () => {
-    if (window.innerWidth > 768) setIsMenuOpen(false)
-  }
+    if (window.innerWidth > 768) setIsMenuOpen(false);
+  };
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  })
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  });
 
   return (
     <header
@@ -191,7 +52,10 @@ export const Navbar = () => {
     >
       <nav className="max-w-7xl mx-auto flex justify-between items-center px-4 py-4">
         {/* Logo with hover effect */}
-        <Link href="/" className="flex items-center p-2 hover:opacity-75 transition-all duration-300 hover:scale-105">
+        <Link
+          href="/"
+          className="flex items-center p-2 hover:opacity-75 transition-all duration-300 hover:scale-105"
+        >
           <Image
             priority
             width={75}
@@ -215,7 +79,7 @@ export const Navbar = () => {
             </Link>
           ))}
 
-        <UserButton />
+          <UserButton />
 
           <Link
             href="https://tiltify.com/+borderlands-community/the-hunt-prepare-for-mayhem"
@@ -234,7 +98,11 @@ export const Navbar = () => {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="text-white p-2 rounded-lg hover:bg-green-500/10 transition-all duration-300"
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </nav>
@@ -263,14 +131,12 @@ export const Navbar = () => {
               </Link>
             </motion.div>
           ))}
-              <motion.div
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.2, delay: links.length * 0.1 }}
           >
-           
-           <UserButton />
-
+            <UserButton />
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -291,5 +157,5 @@ export const Navbar = () => {
         </motion.div>
       )}
     </header>
-  )
-}
+  );
+};
