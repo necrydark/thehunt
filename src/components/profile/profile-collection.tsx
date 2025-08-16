@@ -1,4 +1,5 @@
 "use client";
+import { authClient } from "@/lib/auth-client";
 import { rarityColors } from "@/lib/item-changes";
 import { api } from "@/lib/trpc/client";
 import { User } from "@prisma/client";
@@ -22,6 +23,8 @@ type Props = {
 };
 
 export default function ProfileCollection({ user }: Props) {
+  const { data: session } = authClient.useSession();
+
   const {
     data: progress,
     isLoading: progressLoading,
@@ -116,12 +119,14 @@ export default function ProfileCollection({ user }: Props) {
         ) : (
           <div className="text-center py-8 text-gray-400">
             <Target className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>No weapons collected yet. Start hunting!</p>
-            <Link href="/dashboard/checklist">
-              <Button className="mt-4 text-black bg-primary-green hover:bg-primary-green/75">
-                View Checklist
-              </Button>
-            </Link>
+            <p>No weapons collected yet. {user.name} needs to start hunting!</p>
+            {user.name === session?.user.name && (
+              <Link href="/dashboard/checklist">
+                <Button className="mt-4 text-black bg-primary-green hover:bg-primary-green/75">
+                  View Checklist
+                </Button>
+              </Link>
+            )}
           </div>
         )}
       </CardContent>
