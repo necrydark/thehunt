@@ -31,9 +31,9 @@ export default function ProfileOverview({ user }: Props) {
     data: submissions,
     isLoading: submissionsLoading,
     error: submissionsError,
-  } = api.submission.getUserSubmissions.useQuery({
+  } = api.submission.getUserSubmissionsByUsername.useQuery({
     limit: 3,
-    status: "APPROVED",
+    username: user.name,
   });
 
   if (progressLoading || itemsLoading || submissionsLoading) {
@@ -133,7 +133,7 @@ export default function ProfileOverview({ user }: Props) {
               </div>
             ) : (
               <div>
-                <h1>You have no recent activity.</h1>
+                <h1>{user.name} has no recent activity.</h1>
               </div>
             )}
           </div>

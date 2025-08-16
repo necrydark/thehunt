@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 import {
   adminProcedure,
@@ -98,6 +99,61 @@ export const itemRouter = router({
       };
     });
   }),
+
+  getUserProgressByUsername: publicProcedure
+    .input(
+      z.object({
+        username: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUnique({
+        where: { name: input.username },
+        select: { id: true },
+      });
+
+      if (!user) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+      }
+
+      const items = await ctx.db.item.findMany({
+        include: {
+          userItems: {
+            where: { userId: user.id },
+          },
+          submissions: {
+            where: {
+              userId: user.id,
+              status: "APPROVED", // Only show approved submissions for public view
+            },
+            orderBy: { submittedAt: "desc" },
+            take: 1,
+          },
+        },
+        orderBy: [{ rarity: "desc" }, { points: "desc" }],
+      });
+
+      return items.map((item) => {
+        const hasObtained = item.userItems.length > 0;
+        const latestApprovedSubmission = item.submissions[0] || null;
+
+        // For public view, only show approved or not obtained
+        let userItemStatus: "approved" | "Not Submitted" = "Not Submitted";
+
+        if (hasObtained) {
+          userItemStatus = "approved";
+        }
+
+        return {
+          ...item,
+          isObtained: hasObtained,
+          latestSubmission: latestApprovedSubmission, // Only approved submissions
+          userItemStatus: userItemStatus,
+          // Don't expose rejection reasons publicly
+          rejectionReason: null,
+        };
+      });
+    }),
 
   getById: publicProcedure
     .input(

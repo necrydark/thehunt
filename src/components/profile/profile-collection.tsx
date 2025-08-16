@@ -34,7 +34,9 @@ export default function ProfileCollection({ user }: Props) {
     data: userProgress,
     isLoading: userProgressLoading,
     error: userProgressError,
-  } = api.item.getUserProgress.useQuery(undefined);
+  } = api.item.getUserProgressByUsername.useQuery({
+    username: user.name,
+  });
 
   if (progressLoading || userProgressLoading) {
     return (

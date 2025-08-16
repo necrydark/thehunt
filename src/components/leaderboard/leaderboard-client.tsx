@@ -314,7 +314,7 @@ export default function LeaderboardPage() {
                     <div className="flex items-center gap-2">
                       <Link
                         href={`/profile/${user.name}`}
-                        className="underline"
+                        className="hover:underline"
                       >
                         <h3 className="font-semibold">
                           {user.name || "Anonymous"}
