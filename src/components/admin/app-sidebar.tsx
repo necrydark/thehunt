@@ -1,0 +1,79 @@
+"use client";
+
+import { BookOpen, Home, Send, Swords, Users } from "lucide-react";
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import { usePathname } from "next/navigation";
+
+// Menu items.
+const items = [
+  {
+    title: "Dashboard",
+    url: "/admin",
+    icon: Home,
+  },
+  {
+    title: "Users",
+    url: "/admin/users",
+    icon: Users,
+  },
+  {
+    title: "Submissions",
+    url: "/admin/submissions",
+    icon: Send,
+  },
+  {
+    title: "Items",
+    url: "/admin/items",
+    icon: Swords,
+  },
+  {
+    title: "Back To Main",
+    url: "/",
+    icon: BookOpen,
+  },
+];
+
+export function AppSidebar() {
+  const pathname = usePathname();
+
+  return (
+    <Sidebar className="bg-black border-r-primary-green">
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-white">Admin</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    className={
+                      pathname === item.url
+                        ? "bg-primary-green !text-black rounded-md hover:bg-primary-green active:bg-primary-green"
+                        : "bg-transparent text-white hover:bg-primary-green active:bg-primary-green !focus-visible:ring-0"
+                    }
+                    asChild
+                  >
+                    <a href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
+  );
+}

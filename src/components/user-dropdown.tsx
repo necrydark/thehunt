@@ -1,6 +1,6 @@
 "use client";
 import { User } from "better-auth";
-import { LogOut, Shield, User2 } from "lucide-react";
+import { LogOut, Paperclip, Shield, User2 } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
@@ -57,6 +57,17 @@ export default function UserDropdown({ user, onSignOut }: UserProps) {
                 >
                   <Shield className="mr-2 text-black" />
                   Admin
+                </Link>
+              </DropdownMenuItem>
+            )}
+            {(user.role === "Reviewer" || user.role === "Admin") && (
+              <DropdownMenuItem className="cursor-pointer  rounded-[5px] text-black focus:bg-[#657e26] ">
+                <Link
+                  className="text-black inline-flex items-center"
+                  href={`/admin/submissions`}
+                >
+                  <Paperclip className="mr-2 text-black" />
+                  Submissions
                 </Link>
               </DropdownMenuItem>
             )}

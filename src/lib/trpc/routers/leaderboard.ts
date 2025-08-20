@@ -96,11 +96,18 @@ export const leaderboardRouter = router({
 
     const totalItems = await ctx.db.item.count();
 
+    const totalPointsAggregate = await ctx.db.user.aggregate({
+      _sum: {
+        totalPoints: true,
+      },
+    });
+
     return {
       totalUsers,
       totalSubmissions,
       approvedSubmissions,
       totalItems,
+      totalPoints: totalPointsAggregate._sum.totalPoints || 0,
     };
   }),
 

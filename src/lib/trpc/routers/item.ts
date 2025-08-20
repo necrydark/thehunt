@@ -71,18 +71,18 @@ export const itemRouter = router({
 
       // Determine the item's progress status for the user
       let userItemStatus:
-        | "approved"
-        | "pending"
-        | "rejected"
+        | "Approved"
+        | "Pending"
+        | "Rejected"
         | "Not Submitted" = "Not Submitted";
 
       if (hasObtained) {
-        userItemStatus = "approved";
+        userItemStatus = "Approved";
       } else if (latestSubmission) {
         if (latestSubmission.status === "PENDING") {
-          userItemStatus = "pending";
+          userItemStatus = "Pending";
         } else if (latestSubmission.status === "REJECTED") {
-          userItemStatus = "rejected";
+          userItemStatus = "Rejected";
         }
       }
 
@@ -187,6 +187,49 @@ export const itemRouter = router({
         },
       });
     }),
+
+  getItemStats: publicProcedure.query(async ({ ctx }) => {
+    const [totalItems, totalPoints, pointsByRarity] = await Promise.all([
+      ctx.db.item.count(),
+
+      ctx.db.item.aggregate({
+        _sum: {
+          points: true,
+        },
+      }),
+
+      ctx.db.item.groupBy({
+        by: ["rarity"],
+        _sum: {
+          points: true,
+        },
+        _count: {
+          _all: true,
+        },
+        orderBy: {
+          rarity: "desc",
+        },
+      }),
+    ]);
+
+    return {
+      totalItems,
+      totalPoints: totalPoints._sum.points || 0,
+      averagePoints:
+        totalItems > 0
+          ? Math.round((totalPoints._sum.points || 0) / totalItems)
+          : 0,
+      pointsByRarity: pointsByRarity.map((item) => ({
+        rarity: item.rarity,
+        count: item._count._all,
+        totalPoints: item._sum.points || 0,
+        averagePoints:
+          item._count._all > 0
+            ? Math.round((item._sum.points || 0) / item._count._all)
+            : 0,
+      })),
+    };
+  }),
 
   create: adminProcedure
     .input(

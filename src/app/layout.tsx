@@ -1,5 +1,3 @@
-import Footer from "@/components/footer";
-import { Navbar } from "@/components/navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { TRPCProvider } from "@/lib/providers/trpc-provider";
 import type { Metadata } from "next";
@@ -20,10 +18,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={` font-display antialiased`}>
         <TRPCProvider>
-          <Navbar />
           {children}
           <Toaster />
-          <Footer />
         </TRPCProvider>
       </body>
     </html>

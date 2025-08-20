@@ -15,3 +15,9 @@ export const weaponSubmission = z.object({
   itemId: z.string(),
   twitchClipLink: z.string(),
 });
+
+export const submissionReview = z.object({
+  id: z.string(),
+  status: z.enum(["APPROVED", "REJECTED"]),
+  rejectionReason: z.string().optional(),
+});

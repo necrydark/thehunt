@@ -33,8 +33,8 @@ export default function ProfileStats({ user }: Props) {
 
   if (progressLoading || itemsLoading || rankLoading) {
     return (
-      <div className="min-h-screen w-full relative">
-        <div className="flex items-center justify-center min-h-[400px]">
+      <div className="relative">
+        <div className="flex items-center justify-center ">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-green" />
         </div>
       </div>
@@ -44,8 +44,8 @@ export default function ProfileStats({ user }: Props) {
   // Add error handling
   if (progressError || itemsError || rankError) {
     return (
-      <div className="min-h-screen w-full relative">
-        <div className="flex items-center justify-center min-h-[400px]">
+      <div className="relative">
+        <div className="flex items-center justify-center">
           <div className="text-red-500">
             Error loading data:{" "}
             {progressError?.message ||

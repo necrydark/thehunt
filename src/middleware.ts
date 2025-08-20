@@ -10,6 +10,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/login") || pathname.startsWith("/register");
   const isDashboardPage = pathname.startsWith("/dashboard");
   const isAdminPage = pathname.startsWith("/admin");
+  const isReviewerPage = pathname.startsWith("/admin/submissions");
 
   // Redirect authenticated users away from auth pages
   if (isAuthPage && sessionCookie) {
@@ -25,7 +26,7 @@ export async function middleware(request: NextRequest) {
 
   // Protect admin routes - require authentication
   // (role check will be handled at page/component level)
-  if (isAdminPage && !sessionCookie) {
+  if ((isAdminPage || isReviewerPage) && !sessionCookie) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);

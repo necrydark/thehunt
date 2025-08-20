@@ -1,4 +1,3 @@
-import { extractClipId } from "@/lib/clip-helper";
 import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 import {
@@ -26,6 +25,8 @@ export const submissionRouter = router({
         },
       });
 
+      console.log("Called");
+
       if (existingUserItem) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -47,13 +48,11 @@ export const submissionRouter = router({
         });
       }
 
-      const clip = extractClipId(input.twitchClipUrl);
-
       return await ctx.db.submission.create({
         data: {
           userId: ctx.user.id,
           itemId: input.itemId,
-          twitchClipUrl: clip as string,
+          twitchClipUrl: input.twitchClipUrl,
         },
         include: {
           item: true,
@@ -145,7 +144,7 @@ export const submissionRouter = router({
     .input(
       z.object({
         status: z.enum(["PENDING", "APPROVED", "REJECTED"]).optional(),
-        limit: z.number().default(50),
+        limit: z.number().default(50).optional(),
         offset: z.number().default(0),
       })
     )

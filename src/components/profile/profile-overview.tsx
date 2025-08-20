@@ -21,6 +21,8 @@ export default function ProfileOverview({ user }: Props) {
   } = api.user.getPublicStats.useQuery({
     username: user.name,
   });
+
+  const { data: itemsPoints } = api.item.getItemStats.useQuery();
   const {
     data: items,
     isLoading: itemsLoading,
@@ -38,8 +40,8 @@ export default function ProfileOverview({ user }: Props) {
 
   if (progressLoading || itemsLoading || submissionsLoading) {
     return (
-      <div className="min-h-screen w-full relative">
-        <div className="flex items-center justify-center min-h-[400px]">
+      <div className="relative">
+        <div className="flex items-center justify-center ">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-green" />
         </div>
       </div>
@@ -49,8 +51,8 @@ export default function ProfileOverview({ user }: Props) {
   // Add error handling
   if (progressError || itemsError || submissionsError) {
     return (
-      <div className="min-h-screen w-full relative">
-        <div className="flex items-center justify-center min-h-[400px]">
+      <div className="relative">
+        <div className="flex items-center justify-center ">
           <div className="text-red-500">
             Error loading data:{" "}
             {progressError?.message ||
@@ -83,6 +85,13 @@ export default function ProfileOverview({ user }: Props) {
             </span>
           </div>
           <Progress value={progressPercentage} className="h-3 bg-black" />
+
+          <div className="flex justify-between text-sm">
+            <span>Total Points</span>
+            <span>
+              {progress?.totalPoints}/{itemsPoints?.totalPoints}
+            </span>
+          </div>
         </CardContent>
       </Card>
       <Card className="bg-black/20 border-white/10 text-white">
