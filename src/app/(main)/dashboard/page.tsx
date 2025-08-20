@@ -1,42 +1,61 @@
 // This is the users dashboard
 
-import DashboardClient from "@/components/dashboard/dashboard-client"
-import DashboardHeader from "@/components/dashboard/dashboard-header"
-import { auth } from "@/lib/auth"
+import DashboardClient from "@/components/dashboard/dashboard-client";
+import DashboardHeader from "@/components/dashboard/dashboard-header";
+import { auth } from "@/lib/auth";
 // import db from "@/lib/db"
-import { headers } from "next/headers"
-import Link from "next/link"
-
+import { headers } from "next/headers";
+import Link from "next/link";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
-    headers: await headers()
-  })
+    headers: await headers(),
+  });
 
-  if(!session?.user) {
+  if (!session?.user) {
     return (
       <div className="min-h-screen w-full relative">
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(125% 125% at 50% 90%, #000000 40%, #072607 100%)",
-        }}
-      />
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            background:
+              "radial-gradient(125% 125% at 50% 90%, #000000 40%, #072607 100%)",
+          }}
+        />
 
-<div className="text-center">
+        <div className="text-center">
           <h2 className="text-2xl font-bold mb-2">Please sign in</h2>
-          <p className="text-gray-600">You need to be logged in to view your dashboard</p>
+          <p className="text-gray-600">
+            You need to be logged in to view your dashboard
+          </p>
           <Link href={"/login"}>Login</Link>
         </div>
-
       </div>
-    )
+    );
+  }
+
+  if (session.user.banned) {
+    return (
+      <div className="min-h-screen w-full relative">
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            background:
+              "radial-gradient(125% 125% at 50% 90%, #000000 40%, #072607 100%)",
+          }}
+        />
+
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-2">You are banned.</h2>
+          {session?.user.banReason && <p>{session?.user.banReason}</p>}
+          <Link href={"/contact"}>Contact Support</Link>
+          <span>to get unbanned.</span>
+        </div>
+      </div>
+    );
   }
 
   const user = session?.user;
-
-
 
   // const items = await db.item.findMany();
 
@@ -50,27 +69,26 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen w-full relative">
-    <div
-      className="absolute inset-0 z-0"
-      style={{
-        background:
-          "radial-gradient(125% 125% at 50% 90%, #000000 40%, #072607 100%)",
-      }}
-    />
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(125% 125% at 50% 90%, #000000 40%, #072607 100%)",
+        }}
+      />
 
-<div className="h-full w-full relative z-10">
-      <div className="container relative mx-auto px-4  pt-[15rem] pb-[5rem]">
-        <DashboardHeader
-          user={{
-            ...user,
-            role: user?.role ?? undefined,
-            totalPoints: user?.totalPoints ?? 0
-          }}
-        />
-        <DashboardClient />
+      <div className="h-full w-full relative z-10">
+        <div className="container relative mx-auto px-4  pt-[15rem] pb-[5rem]">
+          <DashboardHeader
+            user={{
+              ...user,
+              role: user?.role ?? undefined,
+              totalPoints: user?.totalPoints ?? 0,
+            }}
+          />
+          <DashboardClient />
+        </div>
       </div>
-
-  </div>
     </div>
-  )
+  );
 }

@@ -16,6 +16,9 @@ model User {
   createdAt           DateTime
   updatedAt           DateTime
   role                String
+  banned              Boolean?
+  banReason           String?
+  banExpire           DateTime?
   totalPoints         Int?         @default(0)
   emailVerified       Boolean?
   reviewedSubmissions Submission[] @relation("AdminReviews")
@@ -28,15 +31,16 @@ model User {
 }
 
 model Session {
-  id        String   @id
-  expiresAt DateTime
-  token     String   @unique
-  createdAt DateTime
-  updatedAt DateTime
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String   @id
+  expiresAt      DateTime
+  token          String   @unique
+  createdAt      DateTime
+  updatedAt      DateTime
+  ipAddress      String?
+  userAgent      String?
+  userId         String
+  impersonatedBy String?
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("session")
 }

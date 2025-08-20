@@ -1,6 +1,11 @@
 import { TRPCError } from "@trpc/server";
 import * as z from "zod";
-import { protectedProcedure, publicProcedure, router } from "../server";
+import {
+  adminProcedure,
+  protectedProcedure,
+  publicProcedure,
+  router,
+} from "../server";
 
 export const userRouter = router({
   getProfile: protectedProcedure.query(async ({ ctx }) => {
@@ -169,5 +174,21 @@ export const userRouter = router({
         itemsObtained: user._count.userItems,
         approvedSubmissions: user._count.submissions,
       };
+    }),
+
+  update: adminProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        role: z.enum(["Participant", "Reviewer", "Admin"]),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.user.update({
+        where: { id: input.userId },
+        data: {
+          role: input.role,
+        },
+      });
     }),
 });

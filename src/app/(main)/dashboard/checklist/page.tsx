@@ -34,6 +34,27 @@ export default async function ChecklistPage() {
     );
   }
 
+  if (session.user.banned) {
+    return (
+      <div className="min-h-screen w-full relative">
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            background:
+              "radial-gradient(125% 125% at 50% 90%, #000000 40%, #072607 100%)",
+          }}
+        />
+
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-2">You are banned.</h2>
+          {session?.user.banReason && <p>{session?.user.banReason}</p>}
+          <Link href={"/contact"}>Contact Support</Link>
+          <span>to get unbanned.</span>
+        </div>
+      </div>
+    );
+  }
+
   const user = session?.user;
 
   return (

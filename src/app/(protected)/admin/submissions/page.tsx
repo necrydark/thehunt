@@ -15,6 +15,10 @@ export default async function SubmissionsAdminPage() {
     redirect("/");
   }
 
+  if (session.user.banned) {
+    redirect("/");
+  }
+
   return (
     <div className="container mx-auto relative z-10 px-4 py-8">
       <h1 className="text-3xl text-primary-green leading-tight mb-8 font-bold">

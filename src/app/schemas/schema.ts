@@ -21,3 +21,18 @@ export const submissionReview = z.object({
   status: z.enum(["APPROVED", "REJECTED"]),
   rejectionReason: z.string().optional(),
 });
+
+export const banUserSchema = z.object({
+  userId: z.string(),
+  banReason: z.string().optional(),
+  banExpiresIn: z.date().optional(),
+});
+
+export const unbanUserSchema = z.object({
+  userId: z.string(),
+});
+
+export const userUpdateSchema = z.object({
+  userId: z.string(),
+  role: z.enum(["Participant", "Reviewer", "Admin"]),
+});

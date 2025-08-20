@@ -87,6 +87,26 @@ export default function SubmissionsTable() {
     });
   };
 
+  const handleApprove = async () => {
+    form.setValue("status", "APPROVED");
+    try {
+      await form.handleSubmit(handleSubmit)();
+      setIsDialogOpen(false); // Close dialog after successful submission
+    } catch (error) {
+      console.error("Approval failed:", error);
+    }
+  };
+
+  const handleReject = async () => {
+    form.setValue("status", "REJECTED");
+    try {
+      await form.handleSubmit(handleSubmit)();
+      setIsDialogOpen(false); // Close dialog after successful submission
+    } catch (error) {
+      console.error("Rejection failed:", error);
+    }
+  };
+
   if (adminStatsLoading || submissionsLoading) {
     return (
       <div className="relative mt-8">
@@ -235,8 +255,8 @@ export default function SubmissionsTable() {
                         <DialogHeader>
                           <DialogTitle>Review Submission</DialogTitle>
                           <DialogDescription>
-                            Review the evidence and approve or reject this
-                            weapon submission
+                            Review the evidence and approve or reject this item
+                            submission
                           </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4">
@@ -256,7 +276,7 @@ export default function SubmissionsTable() {
                                 </div>
                                 <div className="flex justify-center flex-col space-y-2 ">
                                   <span className="text-sm text-gray-400">
-                                    Weapon
+                                    Item
                                   </span>
                                   <span className="text-primary-green">
                                     {submission.item.name}
@@ -319,27 +339,27 @@ export default function SubmissionsTable() {
 
                               <div className="flex justify-end space-x-4">
                                 <Button
-                                  type="submit"
-                                  onClick={() => {
-                                    form.setValue("status", "REJECTED");
-                                    setIsDialogOpen(false);
-                                  }}
+                                  type="button"
+                                  onClick={handleReject}
                                   className="bg-red-500 text-white transition-all duration-300 hover:bg-red-500/60"
+                                  disabled={updateMutation.isPending}
                                 >
                                   <XCircle className="h-4 w-4 mr-1" />
-                                  Reject
+                                  {updateMutation.isPending
+                                    ? "Rejecting..."
+                                    : "Reject"}
                                 </Button>
 
                                 <Button
-                                  type="submit"
-                                  onClick={() => {
-                                    form.setValue("status", "APPROVED");
-                                    setIsDialogOpen(false);
-                                  }}
+                                  type="button"
+                                  onClick={handleApprove}
                                   className="bg-primary-green text-black transition-all duration-300 hover:bg-primary-green/60"
+                                  disabled={updateMutation.isPending}
                                 >
                                   <CheckCircle className="h-4 w-4 mr-1" />
-                                  Approve
+                                  {updateMutation.isPending
+                                    ? "Approving..."
+                                    : "Approve"}
                                 </Button>
                               </div>
                             </form>
@@ -352,6 +372,29 @@ export default function SubmissionsTable() {
               </Card>
             );
           })}
+          <div className="flex items-center justify-between pt-6">
+            <Button
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={page === 0}
+              className="text-black hover:opacity-90 bg-primary-green hover:bg-primary-green/75 "
+            >
+              Previous
+            </Button>
+
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-primary-green">
+                Page {page + 1}
+              </span>
+            </div>
+
+            <Button
+              onClick={() => setPage((p) => p + 1)}
+              disabled={!submissions || submissions.length < ITEMS_PER_PAGE}
+              className="text-black hover:opacity-90 bg-primary-green hover:bg-primary-green/75 "
+            >
+              Next
+            </Button>
+          </div>
         </>
       ) : (
         <div className="pt-[5rem]">

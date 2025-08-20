@@ -17,7 +17,10 @@ export default function UserButton() {
   if (user) {
     return (
       <UserDropdown
-        user={user}
+        user={{
+          ...user,
+          role: user.role ?? undefined,
+        }}
         onSignOut={() => {
           authClient.signOut({
             fetchOptions: {
