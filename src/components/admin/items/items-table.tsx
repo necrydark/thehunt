@@ -75,19 +75,22 @@ export default function ItemsTable() {
     resolver: zodResolver(itemSchema),
     defaultValues: {
       name: "",
-      points: 0,
+      points: 1,
       mayhem: "",
       listGroup: "",
       type: "",
       source: "",
       maps: "",
       missionType: "",
-      rarity: 0,
+      rarity: 1,
       notes: "",
     },
   });
 
   const createHandleSubmit = (data: ItemCreateValues) => {
+    console.log("Form submitted with data:", data);
+    console.log("Form is valid:", createForm.formState.isValid);
+    console.log("Form errors:", createForm.formState.errors);
     createMutation.mutate({
       ...data,
     });
@@ -158,7 +161,7 @@ export default function ItemsTable() {
                           <FormLabel className="text-white">Name</FormLabel>
                           <FormControl>
                             <Input
-                              className="border-primary-green bg-black/50 text-white"
+                              className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                               placeholder="Item name"
                               {...field}
                             />
@@ -179,8 +182,9 @@ export default function ItemsTable() {
                             <FormControl>
                               <Input
                                 type="number"
-                                className="border-primary-green bg-black/50 text-white"
-                                placeholder="0"
+                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
+                                placeholder="1"
+                                min={1}
                                 {...field}
                                 onChange={(e) =>
                                   field.onChange(Number(e.target.value))
@@ -200,13 +204,9 @@ export default function ItemsTable() {
                             <FormLabel className="text-white">Mayhem</FormLabel>
                             <FormControl>
                               <Input
-                                type="number"
-                                className="border-primary-green bg-black/50 text-white"
+                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                                 placeholder="0"
                                 {...field}
-                                onChange={(e) =>
-                                  field.onChange(Number(e.target.value))
-                                }
                               />
                             </FormControl>
                             <FormMessage />
@@ -228,7 +228,7 @@ export default function ItemsTable() {
                               value={field.value}
                             >
                               <FormControl>
-                                <SelectTrigger className="border-primary-green bg-black/50 text-white">
+                                <SelectTrigger className="border-primary-green bg-black/50 text-white  focus-visible:ring-0 focus-visible:border-primary-green">
                                   <SelectValue placeholder="Select type" />
                                 </SelectTrigger>
                               </FormControl>
@@ -311,8 +311,11 @@ export default function ItemsTable() {
                                 min={1}
                                 max={5}
                                 type="number"
-                                className="border-primary-green bg-black/50 text-white"
+                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50 "
                                 {...field}
+                                onChange={(e) =>
+                                  field.onChange(Number(e.target.value))
+                                }
                               />
                             </FormControl>
                             <FormMessage />
@@ -331,7 +334,7 @@ export default function ItemsTable() {
                             <FormLabel className="text-white">Source</FormLabel>
                             <FormControl>
                               <Input
-                                className="border-primary-green bg-black/50 text-white"
+                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                                 placeholder="Item source"
                                 {...field}
                               />
@@ -349,7 +352,7 @@ export default function ItemsTable() {
                             <FormLabel className="text-white">Maps</FormLabel>
                             <FormControl>
                               <Input
-                                className="border-primary-green bg-black/50 text-white"
+                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                                 placeholder="Available maps"
                                 {...field}
                               />
@@ -372,7 +375,7 @@ export default function ItemsTable() {
                             </FormLabel>
                             <FormControl>
                               <Input
-                                className="border-primary-green bg-black/50 text-white"
+                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                                 placeholder="Group classification"
                                 {...field}
                               />
@@ -392,7 +395,7 @@ export default function ItemsTable() {
                             </FormLabel>
                             <FormControl>
                               <Input
-                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green"
+                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                                 placeholder="Mission type"
                                 {...field}
                               />
@@ -412,7 +415,7 @@ export default function ItemsTable() {
                           <FormLabel className="text-white">Notes</FormLabel>
                           <FormControl>
                             <Textarea
-                              className="border-primary-green bg-black/50 text-white resize-none"
+                              className="border-primary-green bg-black/50 resize-none text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                               placeholder="Additional notes..."
                               rows={3}
                               {...field}

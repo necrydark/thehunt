@@ -38,7 +38,7 @@ export const userUpdateSchema = z.object({
 });
 
 export const itemSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   name: z.string(),
   points: z.number().min(1),
   mayhem: z.string(),

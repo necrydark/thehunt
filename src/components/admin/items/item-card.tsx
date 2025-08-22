@@ -126,7 +126,10 @@ export default function ItemCard({ item }: Props) {
   };
 
   const updateHandleSubmit = (data: ItemUpdateValues) => {
-    updateMutation.mutate(data);
+    updateMutation.mutate({
+      id: data.id as string,
+      ...data,
+    });
   };
 
   console.log(item);
@@ -202,8 +205,9 @@ export default function ItemCard({ item }: Props) {
                 </div>
               </div>
               {item.notes && (
-                <div className="bg-black/20 p-2 text-white rounded-md">
-                  {item.notes}
+                <div className="bg-black/50 my-4 p-2 text-white rounded-md">
+                  <span>Notes:</span>
+                  <p className="text-xs">{item.notes}</p>
                 </div>
               )}
             </div>
@@ -239,7 +243,7 @@ export default function ItemCard({ item }: Props) {
                 type="button"
                 variant="outline"
                 onClick={() => setIsDeleteDialogOpen(false)}
-                className="border-gray-600 text-white hover:bg-gray-800"
+                className="bg-black text-white hover:text-white/75 hover:bg-black"
                 disabled={deleteMutation.isPending}
               >
                 Cancel
@@ -291,7 +295,7 @@ export default function ItemCard({ item }: Props) {
                       <FormLabel className="text-white">Name</FormLabel>
                       <FormControl>
                         <Input
-                          className="border-primary-green bg-black/50 text-white"
+                          className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                           placeholder="Item name"
                           {...field}
                         />
@@ -312,7 +316,7 @@ export default function ItemCard({ item }: Props) {
                         <FormControl>
                           <Input
                             type="number"
-                            className="border-primary-green bg-black/50 text-white"
+                            className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                             placeholder="0"
                             {...field}
                             onChange={(e) =>
@@ -333,13 +337,9 @@ export default function ItemCard({ item }: Props) {
                         <FormLabel className="text-white">Mayhem</FormLabel>
                         <FormControl>
                           <Input
-                            type="number"
-                            className="border-primary-green bg-black/50 text-white"
+                            className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                             placeholder="0"
                             {...field}
-                            onChange={(e) =>
-                              field.onChange(Number(e.target.value))
-                            }
                           />
                         </FormControl>
                         <FormMessage />
@@ -444,7 +444,7 @@ export default function ItemCard({ item }: Props) {
                             min={1}
                             max={5}
                             type="number"
-                            className="border-primary-green bg-black/50 text-white"
+                            className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                             {...field}
                           />
                         </FormControl>
@@ -464,7 +464,7 @@ export default function ItemCard({ item }: Props) {
                         <FormLabel className="text-white">Source</FormLabel>
                         <FormControl>
                           <Input
-                            className="border-primary-green bg-black/50 text-white"
+                            className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                             placeholder="Item source"
                             {...field}
                           />
@@ -482,7 +482,7 @@ export default function ItemCard({ item }: Props) {
                         <FormLabel className="text-white">Maps</FormLabel>
                         <FormControl>
                           <Input
-                            className="border-primary-green bg-black/50 text-white"
+                            className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                             placeholder="Available maps"
                             {...field}
                           />
@@ -503,7 +503,7 @@ export default function ItemCard({ item }: Props) {
                         <FormLabel className="text-white">List Group</FormLabel>
                         <FormControl>
                           <Input
-                            className="border-primary-green bg-black/50 text-white"
+                            className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                             placeholder="Group classification"
                             {...field}
                           />
@@ -523,7 +523,7 @@ export default function ItemCard({ item }: Props) {
                         </FormLabel>
                         <FormControl>
                           <Input
-                            className="border-primary-green bg-black/50 text-white"
+                            className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
                             placeholder="Mission type"
                             {...field}
                           />
@@ -543,7 +543,7 @@ export default function ItemCard({ item }: Props) {
                       <FormLabel className="text-white">Notes</FormLabel>
                       <FormControl>
                         <Textarea
-                          className="border-primary-green bg-black/50 text-white resize-none"
+                          className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50 resize-none"
                           placeholder="Additional notes..."
                           rows={3}
                           {...field}
