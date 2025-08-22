@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { previous } from "@/data/data";
 // import { auth } from "@/lib/auth";
-import { Calendar } from "lucide-react";
+import { Calendar, Github } from "lucide-react";
 // import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
@@ -93,6 +93,29 @@ export default async function Home() {
                   </span>{" "}
                   and rank high on the scoreboard.
                 </p>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="max-w-5xl mx-auto mt-8">
+            <Card className="group bg-black/40 backdrop-blur-sm border-[#BBFE17]/30 hover:border-[#BBFE17] transition-all duration-300 hover:shadow-lg hover:shadow-[#BBFE17]/20">
+              <CardContent className="p-8 text-center">
+                <div className="bg-gradient-to-br from-[#BBFE17] to-[#9FE317] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 text-black text-2xl font-bold group-hover:scale-110 transition-transform duration-300">
+                  <Github className="w-10 h-10" />
+                </div>
+                <h2 className="text-white font-bold text-2xl mb-4">
+                  Contribute
+                </h2>
+                <p className="text-gray-300 leading-relaxed">
+                  Wnat to improve the website? Contribute to the repo.
+                </p>
+                <Link
+                  href="https://github.com/necrydark/thehunt"
+                  target="_blank"
+                >
+                  <Button className=" bg-green-500 mt-4 hover:bg-green-600 text-black font-semibold py-3 rounded-lg transition-all duration-300">
+                    GitHub
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>
@@ -198,7 +221,11 @@ export default async function Home() {
             </div>
 
             <div className="text-center">
-              <Link href={"#"}>
+              <Link
+                href={
+                  "https://tiltify.com/+borderlands-community/the-hunt-prepare-for-mayhem"
+                }
+              >
                 <Button className="bg-gradient-to-r from-[#BBFE17] to-[#9FE317] hover:from-[#9FE317] hover:to-[#BBFE17] text-black font-bold px-8 py-4 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                   Donate Now
                 </Button>

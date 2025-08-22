@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import UserButton from "./user-button";
 
@@ -48,19 +49,22 @@ export const Navbar = () => {
     >
       <nav className="max-w-7xl mx-auto flex justify-between items-center px-4 py-4">
         {/* Logo with hover effect */}
-        <Link
-          href="/"
-          className="flex items-center p-2 hover:opacity-75 transition-all duration-300 hover:scale-105"
-        >
-          <Image
-            priority
-            width={75}
-            height={50}
-            alt="Borderlands Community Fundraising Team Logo"
-            src="/bl-community.png"
-            className="drop-shadow-lg"
-          />
-        </Link>
+        <div className="flex gap-2 items-center">
+          <Link
+            href="/"
+            className="flex items-center p-2 hover:opacity-75 transition-all duration-300 hover:scale-105"
+          >
+            <Image
+              priority
+              width={75}
+              height={50}
+              alt="Borderlands Community Fundraising Team Logo"
+              src="/bl-community.png"
+              className="drop-shadow-lg"
+            />
+          </Link>
+          <Badge className="bg-primary-green text-black">Beta</Badge>
+        </div>
 
         {/* Desktop Nav with improved styling */}
         <div className="hidden md:flex items-center gap-2">
