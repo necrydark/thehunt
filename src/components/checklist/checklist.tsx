@@ -337,7 +337,7 @@ export default function Checklist() {
   if (allItemsLoading || userProgressLoading) {
     return (
       <div>
-        <h1 className="mt-8 text-3xl text-primary-green">Loading Users...</h1>
+        <h1 className="mt-8 text-3xl text-primary-green">Loading Items...</h1>
       </div>
     );
   }
