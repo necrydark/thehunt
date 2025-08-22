@@ -180,7 +180,7 @@ export const userRouter = router({
     .input(
       z.object({
         userId: z.string(),
-        role: z.enum(["Participant", "Reviewer", "Admin"]),
+        role: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {

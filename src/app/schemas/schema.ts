@@ -34,5 +34,19 @@ export const unbanUserSchema = z.object({
 
 export const userUpdateSchema = z.object({
   userId: z.string(),
-  role: z.enum(["Participant", "Reviewer", "Admin"]),
+  role: z.string(),
+});
+
+export const itemSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  points: z.number().min(1),
+  mayhem: z.string(),
+  listGroup: z.string(),
+  type: z.string(),
+  source: z.string(),
+  maps: z.string(),
+  missionType: z.string(),
+  rarity: z.number().min(1).max(5),
+  notes: z.string().optional(),
 });

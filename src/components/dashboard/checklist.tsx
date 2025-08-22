@@ -30,7 +30,7 @@ interface UserUnlocks {
 
 export default function UserChecklist({ items }: UserUnlocks) {
   return (
-    <div className="grid md:grid-cols-3 grid-cols-2 gap-4">
+    <div className="grid grid-cols-2 gap-4">
       {items.map((item, idx) => (
         <div key={idx}>
           <Card className="bg-black relative h-full border-[#BBFE17]">

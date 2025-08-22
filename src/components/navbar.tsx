@@ -13,10 +13,6 @@ const links = [
   { name: "Rules", url: "https://thehunt-virid.vercel.app/#rules" },
   { name: "Assets", url: "https://thehunt-virid.vercel.app/#assets" },
   { name: "Leaderboard", url: "/leaderboard" },
-  {
-    name: "Merch",
-    url: "https://www.bonfire.com/store/borderlands-community-fundraising-team/",
-  },
 ];
 
 export const Navbar = () => {
@@ -78,7 +74,16 @@ export const Navbar = () => {
               <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-green-400 group-hover:w-full group-hover:left-0 transition-all duration-300"></span>
             </Link>
           ))}
-
+          <Link
+            href={
+              "https://www.bonfire.com/store/borderlands-community-fundraising-team/"
+            }
+            target="_blank"
+            className="font-semibold text-white hover:text-green-400 transition-all duration-300 px-4 py-2 rounded-lg hover:bg-green-500/10 relative group"
+          >
+            Merch
+            <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-green-400 group-hover:w-full group-hover:left-0 transition-all duration-300"></span>
+          </Link>
           <UserButton />
 
           <Link
@@ -135,6 +140,22 @@ export const Navbar = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.2, delay: links.length * 0.1 }}
+          >
+            <Link
+              href={
+                "https://www.bonfire.com/store/borderlands-community-fundraising-team/"
+              }
+              target="_blank"
+              className="block font-semibold text-white hover:text-green-400 transition-all duration-300 px-4 py-3 rounded-lg hover:bg-green-500/10"
+            >
+              Merch
+            </Link>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2, delay: links.length * 0.1 }}
+            className="px-4 py-3"
           >
             <UserButton />
           </motion.div>

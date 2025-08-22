@@ -12,6 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { authClient } from "@/lib/auth-client";
 import { usePathname } from "next/navigation";
 
 // Menu items.
@@ -44,6 +45,7 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const { data: session } = authClient.useSession();
   const pathname = usePathname();
 
   return (
@@ -62,6 +64,10 @@ export function AppSidebar() {
                         : "bg-transparent text-white hover:bg-primary-green active:bg-primary-green !focus-visible:ring-0"
                     }
                     asChild
+                    disabled={
+                      session?.user.role === "Reviewer" &&
+                      pathname !== "/admin/submissions"
+                    }
                   >
                     <a href={item.url}>
                       <item.icon />

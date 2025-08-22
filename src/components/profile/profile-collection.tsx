@@ -1,6 +1,6 @@
 "use client";
 import { authClient } from "@/lib/auth-client";
-import { rarityColors } from "@/lib/item-changes";
+import { itemTypes, rarityColors, typeIcons } from "@/lib/item-changes";
 import { api } from "@/lib/trpc/client";
 import { User } from "@prisma/client";
 import { Target } from "lucide-react";
@@ -91,7 +91,7 @@ export default function ProfileCollection({ user }: Props) {
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <span>(typeIcons[weapon?.type])</span>
+                    <span>{typeIcons[itemTypes(weapon?.type)]}</span>
                     <div>
                       <div className="font-semibold">{weapon.name}</div>
                       <div className="text-sm text-gray-400">

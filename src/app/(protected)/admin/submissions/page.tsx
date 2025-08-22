@@ -1,5 +1,6 @@
 import SubmissionsTable from "@/components/admin/submissions/submissions-table";
 import { auth } from "@/lib/auth";
+import { Paperclip } from "lucide-react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -21,9 +22,13 @@ export default async function SubmissionsAdminPage() {
 
   return (
     <div className="container mx-auto relative z-10 px-4 py-8">
-      <h1 className="text-3xl text-primary-green leading-tight mb-8 font-bold">
-        Submissions
-      </h1>
+      <div className="flex gap-1 items-center mb-8">
+        <Paperclip className="h-8 w-8 text-primary-green" />
+
+        <h1 className="text-3xl text-white leading-tight font-bold">
+          Submissions
+        </h1>
+      </div>
       <SubmissionsTable />
     </div>
   );

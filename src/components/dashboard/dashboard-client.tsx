@@ -103,7 +103,10 @@ export default function DashboardClient() {
                 {obtainedItems} / {totalItems}
               </span>
             </div>
-            <Progress value={progressPercentage} className="h-3 bg-black" />
+            <Progress
+              value={progressPercentage}
+              className="h-3 bg-black [&>div]:bg-primary-green"
+            />
           </div>
           <Link href={"/dashboard/checklist"}>
             <Button className="w-full mt-4  cursor-pointer bg-green-500 hover:bg-green-600 text-black">

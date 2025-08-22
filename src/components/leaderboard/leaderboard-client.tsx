@@ -245,13 +245,7 @@ export default function LeaderboardPage() {
                       {user.completedWeapons}
                     </span>
                     <span className="text-gray-300">
-                      weapons (
-                      {stats?.totalItems
-                        ? Math.round(
-                            (user._count.userItems / stats.totalItems) * 100
-                          )
-                        : 0}
-                      )
+                      weapons ({user._count.userItems})
                     </span>
                   </div>
                 </CardContent>

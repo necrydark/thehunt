@@ -1,10 +1,12 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
+import { BASE_URL } from "@/lib/auth-client";
 import { api } from "@/lib/trpc/client";
 import { User } from "@prisma/client";
-import { Calendar, Target, Trophy } from "lucide-react";
+import { Calendar, Clipboard, Target, Trophy } from "lucide-react";
 import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 
 type Props = {
   user: User & {
@@ -90,6 +92,19 @@ export default function ProfileHeader({ user }: Props) {
                 />
                 {progress?.itemsObtained}/{items?.length} Weapons
               </span>
+            </div>
+            <div>
+              <Button
+                className="bg-transparent hover:bg-primary-green/75 hover:text-black"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    `${BASE_URL}/profile/${user.name}`
+                  );
+                }}
+              >
+                <Clipboard className="h-4 w-4" />
+                Share
+              </Button>
             </div>
           </div>
         </div>

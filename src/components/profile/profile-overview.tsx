@@ -77,14 +77,19 @@ export default function ProfileOverview({ user }: Props) {
             Overall Progress
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex justify-between text-sm">
-            <span>Weapons Collected</span>
-            <span>
-              {progress?.itemsObtained}/{items?.length}
-            </span>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>Weapons Collected</span>
+              <span>
+                {progress?.itemsObtained}/{items?.length}
+              </span>
+            </div>
+            <Progress
+              value={progressPercentage}
+              className="h-3 bg-black [&>div]:bg-primary-green"
+            />
           </div>
-          <Progress value={progressPercentage} className="h-3 bg-black" />
 
           <div className="flex justify-between text-sm">
             <span>Total Points</span>
@@ -106,19 +111,19 @@ export default function ProfileOverview({ user }: Props) {
             {submissions && submissions?.length > 0 ? (
               <div>
                 {submissions.map((submission) => {
-                  const weapon = items?.find((w) => w.id === submission.id);
-
                   return (
                     <div
                       key={submission.id}
                       className="flex items-center gap-3 text-sm"
                     >
                       <div className="text-lg">
-                        {weapon ? typeIcons[itemTypes(weapon?.type)] : "?"}
+                        {submission.item
+                          ? typeIcons[itemTypes(submission?.item?.type)]
+                          : "?"}
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 space-y-1">
                         <div className="font-medium">
-                          {weapon?.name || "Unknown Weapon"}
+                          {submission?.item.name || "Unknown Weapon"}
                         </div>
                         <div className="text-gray-400">
                           {submission.submittedAt
@@ -133,7 +138,7 @@ export default function ProfileOverview({ user }: Props) {
                             : "Unknown date"}
                         </div>
                         <Badge className="bg-primary-green text-black">
-                          +{weapon?.points || 0}
+                          +{submission?.item.points || 0}
                         </Badge>
                       </div>
                     </div>

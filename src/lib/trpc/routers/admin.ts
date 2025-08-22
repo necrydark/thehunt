@@ -58,7 +58,7 @@ export const adminRouter = router({
       z.object({
         userId: z.string(),
         banReason: z.string().optional(),
-        banExpiresIn: z.date().optional(),
+        banExpiresIn: z.coerce.date().optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {

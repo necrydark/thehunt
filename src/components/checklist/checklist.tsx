@@ -50,7 +50,7 @@ const WeaponCard = ({
   isSubmitting,
 }: {
   weapon: any;
-  onSubmit: (weaponId: string) => void;
+  onSubmit: (weaponId: string, clipUrl: string) => void;
   isSubmitting: boolean;
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -65,7 +65,7 @@ const WeaponCard = ({
 
   const handleSubmit = useCallback(
     (data: WeaponSubmissionValues) => {
-      onSubmit(data.itemId);
+      onSubmit(data.itemId, data.twitchClipLink);
       setIsDialogOpen(false);
     },
     [onSubmit]
@@ -294,10 +294,11 @@ export default function Checklist() {
   });
 
   const handleSubmit = useCallback(
-    (itemId: string) => {
+    (itemId: string, clipUrl: string) => {
+      console.log(itemId);
       submitMutation.mutate({
         itemId,
-        twitchClipUrl: "",
+        twitchClipUrl: clipUrl,
       });
     },
     [submitMutation]
@@ -336,7 +337,7 @@ export default function Checklist() {
   if (allItemsLoading || userProgressLoading) {
     return (
       <div>
-        <h1 className="text-3xl text-white">Loading Items...</h1>
+        <h1 className="mt-8 text-3xl text-primary-green">Loading Users...</h1>
       </div>
     );
   }
@@ -405,7 +406,7 @@ export default function Checklist() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2">
         {mergedItems.map((weapon) => (
           <WeaponCard
             key={weapon.id}
