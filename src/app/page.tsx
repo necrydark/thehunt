@@ -285,7 +285,7 @@ export default async function Home() {
               {previous.map((prev, idx) => (
                 <Card
                   key={idx}
-                  className="group hover:shadow-2xl bg-black/60 backdrop-blur-sm border-[#BBFE17]/30 hover:border-[#BBFE17] shadow-lg hover:shadow-[#BBFE17]/30 transition-all duration-300 overflow-hidden h-full flex flex-col hover:scale-105"
+                  className="group hover:shadow-2xl bg-black/60 backdrop-blur-sm border-[#BBFE17]/30 hover:border-[#BBFE17] shadow-lg hover:shadow-[#BBFE17]/30 transition-all duration-300 overflow-hidden h-full flex flex-col"
                 >
                   <CardContent className="p-0 flex-1 flex flex-col">
                     <div className="relative overflow-hidden">
@@ -294,7 +294,7 @@ export default async function Home() {
                         alt={prev.name as string}
                         width={400}
                         height={250}
-                        className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="w-full h-48 object-contain group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                       <Badge className="absolute bg-gradient-to-r from-[#BBFE17] to-[#9FE317] top-4 right-4 text-black font-semibold px-3 py-1">
