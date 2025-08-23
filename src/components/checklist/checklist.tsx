@@ -11,7 +11,7 @@ import {
 import { api } from "@/lib/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle, Clock, Search, XCircle } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -266,7 +266,7 @@ export default function Checklist() {
 
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
 
-  useMemo(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
     }, 300);
@@ -278,19 +278,27 @@ export default function Checklist() {
     data: allItems,
     isLoading: allItemsLoading,
     error: allItemsError,
-  } = api.item.getAll.useQuery({
-    search: debouncedSearchQuery,
-    limit: 370,
-    category: category === " " ? undefined : category,
-    rarity: rarity === " " ? undefined : parseInt(rarity) || undefined,
-  });
+  } = api.item.getAll.useQuery(
+    {
+      search: debouncedSearchQuery,
+      limit: 370,
+      category: category === " " ? undefined : category,
+      rarity: rarity === " " ? undefined : parseInt(rarity) || undefined,
+    },
+    {
+      placeholderData: (prev) => prev,
+      staleTime: 30_000,
+      refetchOnWindowFocus: false,
+      enabled: true,
+    }
+  );
 
   const {
     data: userProgress,
     isLoading: userProgressLoading,
     error: userProgressError,
   } = api.item.getUserProgress.useQuery(undefined, {
-    staleTime: 5 * 60 * 1000,
+    staleTime: 2 * 60 * 1000,
   });
 
   const handleSubmit = useCallback(

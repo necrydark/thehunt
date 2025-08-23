@@ -26,6 +26,8 @@ model User {
   userItems           UserItem[]
   accounts            Account[]
   sessions            Session[]
+  Bounty              Bounty[]
+  BountyIssues        Bounty[]     @relation("BountyIssuer")
 
   @@map("user")
 }
@@ -112,6 +114,7 @@ model Item {
   updatedAt    DateTime     @updatedAt
   submissions  Submission[]
   userItems    UserItem[]
+  Bounty       Bounty?
 }
 
 model UserItem {
@@ -124,6 +127,17 @@ model UserItem {
   @@id([userId, itemId])
   @@index([userId])
   @@index([itemId])
+}
+
+model Bounty {
+  id        String @id @default(cuid())
+  price     Int
+  issuedBy  String
+  itemId    String @unique
+  claimedBy String
+  item      Item   @relation(fields: [itemId], references: [id])
+  issuer    User?  @relation("BountyIssuer", fields: [issuedBy], references: [id])
+  user      User   @relation(fields: [claimedBy], references: [id], onDelete: Cascade)
 }
 
 enum SubmissionStatus {
