@@ -135,6 +135,7 @@ model Bounty {
   issuedBy  String
   itemId    String @unique
   claimedBy String
+  status          BountyStatus @default(OPEN)
   item      Item   @relation(fields: [itemId], references: [id])
   issuer    User?  @relation("BountyIssuer", fields: [issuedBy], references: [id])
   user      User   @relation(fields: [claimedBy], references: [id], onDelete: Cascade)
@@ -144,4 +145,10 @@ enum SubmissionStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+enum BountyStatus {
+  OPEN
+  CLAIMED
+  CANCELLED
 }
