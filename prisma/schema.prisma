@@ -21,6 +21,9 @@ model User {
   banExpire           DateTime?
   totalPoints         Int?         @default(0)
   emailVerified       Boolean?
+  platform String?
+  vaultHunter String?
+  profileCompleted Boolean @default(false)
   reviewedSubmissions Submission[] @relation("AdminReviews")
   submissions         Submission[]
   userItems           UserItem[]
@@ -135,7 +138,7 @@ model Bounty {
   issuedBy  String
   itemId    String @unique
   claimedBy String
-  status          BountyStatus @default(OPEN)
+  status    BountyStatus @default(OPEN)
   item      Item   @relation(fields: [itemId], references: [id])
   issuer    User?  @relation("BountyIssuer", fields: [issuedBy], references: [id])
   user      User   @relation(fields: [claimedBy], references: [id], onDelete: Cascade)

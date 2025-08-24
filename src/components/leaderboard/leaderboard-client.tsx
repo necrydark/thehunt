@@ -248,6 +248,14 @@ export default function LeaderboardPage() {
                       weapons ({user._count.userItems})
                     </span>
                   </div>
+                  <div className="flex gap-2">
+                    <Badge className="bg-black border-primary-green/75 text-primary-green">
+                      {user.platform}
+                    </Badge>
+                    <Badge className="bg-black border-primary-green/75 text-primary-green">
+                      {user.vaultHunter}
+                    </Badge>
+                  </div>
                 </CardContent>
               </Card>
             ))}

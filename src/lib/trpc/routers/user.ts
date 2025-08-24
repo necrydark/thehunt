@@ -191,4 +191,23 @@ export const userRouter = router({
         },
       });
     }),
+
+    complete: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        platform: z.string(),
+        vaultHunter: z.string(),
+      })
+    )
+    .mutation(async ({input, ctx}) => {
+      return await ctx.db.user.update({
+        where: { id: input.userId},
+        data: {
+          platform: input.platform,
+          vaultHunter: input.vaultHunter,
+          profileCompleted: true,
+        }
+      })
+    })
 });

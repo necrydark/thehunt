@@ -38,23 +38,6 @@ type SubmissionValues = z.infer<typeof submissionReview>;
 
 export default function SubmissionsTable() {
   const [page, setPage] = useState(0);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const utils = api.useUtils();
-
-  const updateMutation = api.submission.review.useMutation({
-    onSuccess: async () => {
-      toast("Review Submitted");
-      form.reset();
-      setIsDialogOpen(false);
-
-      await utils.submission.getAll.invalidate();
-    },
-    onError: (err) => {
-      toast.error("Failed to submit evidence. Please try again");
-      console.error("Submission error:", err);
-    },
-  });
 
   const {
     data: submissions,
@@ -71,42 +54,6 @@ export default function SubmissionsTable() {
     error: adminStatsError,
   } = api.admin.getAllStats.useQuery();
 
-  const form = useForm<SubmissionValues>({
-    resolver: zodResolver(submissionReview),
-    defaultValues: {
-      id: "",
-      rejectionReason: "",
-      status: "REJECTED",
-    },
-  });
-
-  const handleSubmit = (data: SubmissionValues) => {
-    updateMutation.mutate({
-      id: data.id,
-      status: data.status,
-      rejectionReason: data.rejectionReason,
-    });
-  };
-
-  const handleApprove = async () => {
-    form.setValue("status", "APPROVED");
-    try {
-      await form.handleSubmit(handleSubmit)();
-      setIsDialogOpen(false); // Close dialog after successful submission
-    } catch (error) {
-      console.error("Approval failed:", error);
-    }
-  };
-
-  const handleReject = async () => {
-    form.setValue("status", "REJECTED");
-    try {
-      await form.handleSubmit(handleSubmit)();
-      setIsDialogOpen(false); // Close dialog after successful submission
-    } catch (error) {
-      console.error("Rejection failed:", error);
-    }
-  };
 
   if (adminStatsLoading || submissionsLoading) {
     return (

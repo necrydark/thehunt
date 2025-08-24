@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth";
 // import db from "@/lib/db"
 import { headers } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
@@ -53,6 +54,10 @@ export default async function DashboardPage() {
         </div>
       </div>
     );
+  }
+
+  if(session.user.profileCompleted === false) {
+    redirect("/complete-profile");
   }
 
   const user = session?.user;
