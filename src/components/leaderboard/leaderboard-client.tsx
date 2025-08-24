@@ -248,16 +248,16 @@ export default function LeaderboardPage() {
                       weapons ({user._count.userItems})
                     </span>
                   </div>
-                {(user.platform && user.vaultHunter) && (
-                          <div className="flex justify-center flex-wrap gap-2">
-                          <Badge className="bg-black border-primary-green/75 text-primary-green">
-                            {user.platform}
-                          </Badge>
-                          <Badge className="bg-black border-primary-green/75 text-primary-green">
-                            {user.vaultHunter}
-                          </Badge>
-                        </div>
-                )}
+                  {user.platform && user.vaultHunter && (
+                    <div className="flex justify-center flex-wrap gap-2">
+                      <Badge className="bg-black border-primary-green/75 text-primary-green">
+                        {user.platform}
+                      </Badge>
+                      <Badge className="bg-black border-primary-green/75 text-primary-green">
+                        {user.vaultHunter}
+                      </Badge>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
@@ -315,7 +315,7 @@ export default function LeaderboardPage() {
 
                   {/* User Info */}
                   <div className="flex-1">
-                    <div className="flex items-center sm:justify-normal justify-center gap-2">
+                    <div className="flex items-center sm:justify-normal sm:flex-row flex-col sm:mb-0 mb-2 justify-center gap-2">
                       <Link
                         href={`/profile/${user.name}`}
                         className="hover:underline"
@@ -337,14 +337,14 @@ export default function LeaderboardPage() {
                           : "N/A"}
                       </span>
                     </div>
-                    {(user.platform && user.vaultHunter) && (
+                    {user.platform && user.vaultHunter && (
                       <div className="flex gap-2 mt-2 sm:justify-normal justify-center">
-                            <Badge className="bg-black border-primary-green/75 text-primary-green">
-                            {user.platform}
-                          </Badge>
-                          <Badge className="bg-black border-primary-green/75 text-primary-green">
-                            {user.vaultHunter}
-                          </Badge>
+                        <Badge className="bg-black border-primary-green/75 text-primary-green">
+                          {user.platform}
+                        </Badge>
+                        <Badge className="bg-black border-primary-green/75 text-primary-green">
+                          {user.vaultHunter}
+                        </Badge>
                       </div>
                     )}
                   </div>

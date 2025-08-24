@@ -56,7 +56,7 @@ export default async function DashboardPage() {
     );
   }
 
-  if(session.user.profileCompleted === false) {
+  if (session.user.profileCompleted === false) {
     redirect("/complete-profile");
   }
 
@@ -89,6 +89,8 @@ export default async function DashboardPage() {
               ...user,
               role: user?.role ?? undefined,
               totalPoints: user?.totalPoints ?? 0,
+              vaultHunter: user?.vaultHunter ?? "Moze",
+              platform: user?.platform ?? "PC",
             }}
           />
           <DashboardClient />
