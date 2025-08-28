@@ -1,40 +1,11 @@
 "use client";
 
-import { submissionReview } from "@/app/schemas/schema";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import { itemTypes } from "@/lib/item-changes";
 import { api } from "@/lib/trpc/client";
-import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Calendar, CheckCircle, Eye, XCircle } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import * as z from "zod";
 import SubmissionCard from "./submissions-card";
 
 const ITEMS_PER_PAGE = 20;
-type SubmissionValues = z.infer<typeof submissionReview>;
 
 export default function SubmissionsTable() {
   const [page, setPage] = useState(0);
@@ -53,7 +24,6 @@ export default function SubmissionsTable() {
     isLoading: adminStatsLoading,
     error: adminStatsError,
   } = api.admin.getAllStats.useQuery();
-
 
   if (adminStatsLoading || submissionsLoading) {
     return (
@@ -98,11 +68,30 @@ export default function SubmissionsTable() {
           {submissions.map((submission) => {
             const user = getSubmissionUser(submission.userId);
             const item = getSubmissionItem(submission.itemId);
+            if (!user || !item) {
+              return null;
+            }
             return (
-              <SubmissionCard 
-              item={item}
-              user={user}
-              submission={submission}
+              <SubmissionCard
+                key={submission.id}
+                item={{
+                  ...item,
+                  createdAt: new Date(item.createdAt),
+                  updatedAt: new Date(item.updatedAt),
+                }}
+                user={{
+                  ...user,
+                  createdAt: new Date(user.createdAt),
+                  updatedAt: new Date(user.updatedAt),
+                  banExpire: user.banExpire ? new Date(user.banExpire) : null,
+                }}
+                submission={{
+                  ...submission,
+                  submittedAt: new Date(submission.submittedAt),
+                  reviewedAt: submission.reviewedAt
+                    ? new Date(submission.reviewedAt)
+                    : null,
+                }}
               />
             );
           })}
