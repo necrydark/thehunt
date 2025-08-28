@@ -51,8 +51,8 @@ export const itemSchema = z.object({
   notes: z.string().optional(),
 });
 
-
 export const completeProfileSchema = z.object({
   platform: z.string(),
   vaultHunter: z.string(),
-})
+  description: z.string().optional(),
+});

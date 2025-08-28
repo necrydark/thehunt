@@ -87,7 +87,7 @@ export default function ProfileCollection({ user }: Props) {
             {obtainedWeapons.map((weapon) => (
               <div
                 key={weapon.id}
-                className="border border-white/10 rounded-lg p-4 bg-white/5"
+                className="border border-primary-green rounded-lg p-4 bg-black/20"
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">

@@ -114,7 +114,7 @@ export default function ProfileOverview({ user }: Props) {
                   return (
                     <div
                       key={submission.id}
-                      className="flex items-center gap-3 text-sm"
+                      className="flex items-center gap-3 text-sm bg-black/20 border-primary-green border-[1px] p-4 rounded-md"
                     >
                       <div className="text-lg">
                         {submission.item

@@ -9,28 +9,31 @@ datasource db {
 }
 
 model User {
-  id                  String       @id @default(cuid())
-  name                String       @unique
-  email               String?      @unique
-  image               String?
-  createdAt           DateTime
-  updatedAt           DateTime
-  role                String
-  banned              Boolean?
-  banReason           String?
-  banExpire           DateTime?
-  totalPoints         Int?         @default(0)
-  emailVerified       Boolean?
-  platform String?
-  vaultHunter String?
-  profileCompleted Boolean @default(false)
-  reviewedSubmissions Submission[] @relation("AdminReviews")
+  id               String    @id @default(cuid())
+  name             String    @unique
+  email            String?   @unique
+  image            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  description      String?
+  role             String    @default("Participant")
+  banned           Boolean?  @default(false)
+  banReason        String?
+  banExpire        DateTime?
+  totalPoints      Int       @default(0)
+  emailVerified    Boolean   @default(false)
+  platform         String?
+  vaultHunter      String?
+  profileCompleted Boolean   @default(false)
+
+  // Relations
+  reviewedSubmissions Submission[]  @relation("AdminReviews")
   submissions         Submission[]
   userItems           UserItem[]
   accounts            Account[]
   sessions            Session[]
-  Bounty              Bounty[]
-  BountyIssues        Bounty[]     @relation("BountyIssuer")
+  issuedBounties      Bounty[]      @relation("BountyIssuer")
+  bountyClaims        BountyClaim[]
 
   @@map("user")
 }
@@ -117,7 +120,8 @@ model Item {
   updatedAt    DateTime     @updatedAt
   submissions  Submission[]
   userItems    UserItem[]
-  Bounty       Bounty?
+
+  Bounty Bounty[]
 }
 
 model UserItem {
@@ -133,25 +137,63 @@ model UserItem {
 }
 
 model Bounty {
-  id        String @id @default(cuid())
-  price     Int
-  issuedBy  String
-  itemId    String @unique
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  price       Int // Consider Decimal for currency precision
+  issuedBy    String
+  status      BountyStatus @default(OPEN)
+  expiresAt   DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  itemId      String
+
+  // Relations
+  item   Item          @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  issuer User          @relation("BountyIssuer", fields: [issuedBy], references: [id])
+  claims BountyClaim[]
+
+  @@index([status])
+  @@index([issuedBy])
+  @@index([expiresAt])
+}
+
+model BountyClaim {
+  id        String            @id @default(cuid())
+  bountyId  String
   claimedBy String
-  status    BountyStatus @default(OPEN)
-  item      Item   @relation(fields: [itemId], references: [id])
-  issuer    User?  @relation("BountyIssuer", fields: [issuedBy], references: [id])
-  user      User   @relation(fields: [claimedBy], references: [id], onDelete: Cascade)
+  status    BountyClaimStatus @default(PENDING)
+  message   String?
+  claimedAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt // Add for tracking status changes
+  clipUrl   String
+
+  // Relations  
+  bounty  Bounty @relation(fields: [bountyId], references: [id], onDelete: Cascade)
+  claimer User   @relation(fields: [claimedBy], references: [id])
+
+  @@unique([bountyId, claimedBy])
+  @@index([claimedBy])
+  @@index([status])
+}
+
+enum BountyClaimStatus {
+  PENDING // Waiting for issuer response
+  ACCEPTED // Issuer accepted this claim
+  REJECTED // Issuer rejected this claim  
+  COMPLETED // Transaction completed
+}
+
+enum BountyStatus {
+  OPEN // Available to claim
+  CLAIMED // Someone claimed it  
+  COMPLETED // Work done, bounty paid
+  CANCELLED // Issuer cancelled
+  EXPIRED // Past expiration
 }
 
 enum SubmissionStatus {
   PENDING
   APPROVED
   REJECTED
-}
-
-enum BountyStatus {
-  OPEN
-  CLAIMED
-  CANCELLED
 }

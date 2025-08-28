@@ -154,13 +154,19 @@ export default async function Home() {
                 />
               </div>
               <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-[#BBFE17] leading-tight">
-                  Raising Money for the Kids, One Bounty at a Time
-                </h2>
+                <div className="mb-4">
+                  <h2 className="text-3xl font-bold mb-1 text-[#BBFE17] leading-tight">
+                    What is The Hunt?
+                  </h2>
+                  <span className="text-sm text-muted-foreground">
+                    Raising Money for the Kids, One Bounty at a Time
+                  </span>
+                </div>
                 <p className="text-gray-300 text-lg leading-relaxed">
-                  Vault Hunters race to loot the rarest items in the game. The
-                  player who completes the list in the shortest time from new
-                  character creation will be crowned the Champion!
+                  The Hunt is a biannual event in which Vault Hunters race to
+                  loot the rarest items in the game. The player who completes
+                  the list in the shortest time from new character creation will
+                  be crowned the Champion!
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Badge className="bg-[#BBFE17]/20 text-[#BBFE17] border-[#BBFE17]/30 px-4 py-2">

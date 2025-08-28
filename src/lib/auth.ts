@@ -3,7 +3,6 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
-import { FaTruckMedical } from "react-icons/fa6";
 
 const prisma = new PrismaClient();
 
@@ -35,7 +34,7 @@ export const auth = betterAuth({
         type: "string",
         input: true,
         required: false,
-        defaultValue: "PC"
+        defaultValue: "PC",
       },
       vaultHunter: {
         type: "string",
@@ -47,7 +46,12 @@ export const auth = betterAuth({
         input: false,
         required: false,
         defaultValue: false,
-      }
+      },
+      description: {
+        type: "string",
+        input: true,
+        required: false,
+      },
     },
   },
 

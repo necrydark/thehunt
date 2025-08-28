@@ -44,6 +44,7 @@ import {
 
 type WeaponSubmissionValues = z.infer<typeof weaponSubmission>;
 
+
 const WeaponCard = ({
   weapon,
   onSubmit,

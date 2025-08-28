@@ -9,7 +9,14 @@ import { setTimeout } from "timers";
 import * as z from "zod";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import {
   Select,
   SelectContent,
@@ -17,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Textarea } from "../ui/textarea";
 
 type CompleteProfileValues = z.infer<typeof completeProfileSchema>;
 type Props = {
@@ -51,6 +59,7 @@ export default function CompleteProfileForm({ userId, completed }: Props) {
       userId: userId,
       platform: data.platform,
       vaultHunter: data.vaultHunter,
+      description: data.description,
     });
   };
 
@@ -59,6 +68,7 @@ export default function CompleteProfileForm({ userId, completed }: Props) {
     defaultValues: {
       platform: "",
       vaultHunter: "",
+      description: "",
     },
   });
 
@@ -158,6 +168,24 @@ export default function CompleteProfileForm({ userId, completed }: Props) {
                   )}
                 />
               </div>
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-white">Notes</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50 resize-none"
+                        placeholder="Additional notes..."
+                        rows={3}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <div className="flex justify-end">
                 <Button
                   className="bg-primary-green hover:bg-primary-green/75 hover:shadow-md hover:shadow-primary-green/50 text-black font-semibold py-3 rounded-lg transition-all duration-300"
