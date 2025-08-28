@@ -56,3 +56,10 @@ export const completeProfileSchema = z.object({
   vaultHunter: z.string(),
   description: z.string().optional(),
 });
+
+export const bountySchema = z.object({
+  itemId: z.string(),
+  name: z.string(),
+  price: z.number().min(1),
+  description: z.string(),
+});

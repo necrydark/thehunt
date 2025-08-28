@@ -104,7 +104,6 @@ export const bountyRouter = router({
           claims: true,
           createdAt: true,
           description: true,
-          expiresAt: true,
           id: true,
           issuedBy: true,
           issuer: true,

@@ -143,7 +143,6 @@ model Bounty {
   price       Int // Consider Decimal for currency precision
   issuedBy    String
   status      BountyStatus @default(OPEN)
-  expiresAt   DateTime?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   itemId      String
@@ -155,7 +154,6 @@ model Bounty {
 
   @@index([status])
   @@index([issuedBy])
-  @@index([expiresAt])
 }
 
 model BountyClaim {
