@@ -78,13 +78,13 @@ export default function Bounties() {
 
   return (
     <div>
-      <div className="flex flex-wrap justify-evenly gap-4">
+      <div className="grid gap-6 lg:grid-cols-2 justify-items-center">
         {bounties && bounties.length > 0 ? (
           <>
             {bounties?.map((bounty) => (
               <Card
                 key={bounty.id}
-                className="bg-black/20 border-white/10 relative text-white "
+                className="bg-black/20 border-white/10 relative w-full text-white "
               >
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -172,7 +172,7 @@ export default function Bounties() {
                     {bounty.description && (
                       <div>
                         <span>Description:</span>
-                        <span className="ml-2 font-semibold ">
+                        <span className="ml-2 font-semibold wrap-anywhere">
                           {bounty.description}
                         </span>
                       </div>
