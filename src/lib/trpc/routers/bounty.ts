@@ -3,9 +3,40 @@ import * as z from "zod";
 import { protectedProcedure, publicProcedure, router } from "../server";
 
 export const bountyRouter = router({
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.db.bounty.findMany();
-  }),
+  getAll: publicProcedure
+    .input(
+      z.object({
+        search: z.string().optional(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const where = input.search
+        ? {
+            OR: [
+              {
+                title: { contains: input.search, mode: "insensitive" as const },
+              },
+              {
+                name: { contains: input.search, mode: "insensitive" as const },
+              },
+            ],
+          }
+        : {};
+
+      return await ctx.db.bounty.findMany({
+        where,
+        include: {
+          item: true,
+          issuer: {
+            select: {
+              name: true,
+              image: true,
+              id: true,
+            },
+          },
+        },
+      });
+    }),
 
   create: protectedProcedure
     .input(

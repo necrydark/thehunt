@@ -140,7 +140,7 @@ model Bounty {
   id          String       @id @default(cuid())
   title       String
   description String?
-  price       Int // Consider Decimal for currency precision
+  price       Int
   issuedBy    String
   status      BountyStatus @default(OPEN)
   createdAt   DateTime     @default(now())

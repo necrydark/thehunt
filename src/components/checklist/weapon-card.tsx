@@ -333,6 +333,11 @@ export const WeaponCard = ({
                               <Input
                                 {...field}
                                 type="number"
+                                min={1}
+                                {...field}
+                                onChange={(e) =>
+                                  field.onChange(Number(e.target.value))
+                                }
                                 className="bg-black border-primary-green text-white focus-visible:ring-primary-green "
                               />
                             </FormControl>
