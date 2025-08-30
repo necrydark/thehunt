@@ -4,6 +4,13 @@ import { auth } from "@/lib/auth";
 // import db from "@/lib/db"
 import { headers } from "next/headers";
 
+export async function generateMetadata() {
+  return {
+    title: `Leaderboard`,
+    description: `View the rankings during the event and fight for your rank!`,
+  };
+}
+
 export default async function LeaderboardPage() {
   const session = await auth.api.getSession({
     headers: await headers(),

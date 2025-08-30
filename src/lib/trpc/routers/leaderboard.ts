@@ -34,6 +34,8 @@ export const leaderboardRouter = router({
           totalPoints: true,
           image: true,
           createdAt: true,
+          platform: true,
+          vaultHunter: true,
           _count: {
             select: {
               userItems: true,

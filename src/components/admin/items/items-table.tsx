@@ -88,9 +88,6 @@ export default function ItemsTable() {
   });
 
   const createHandleSubmit = (data: ItemCreateValues) => {
-    console.log("Form submitted with data:", data);
-    console.log("Form is valid:", createForm.formState.isValid);
-    console.log("Form errors:", createForm.formState.errors);
     createMutation.mutate({
       ...data,
     });

@@ -1,4 +1,5 @@
 import { adminRouter } from "./routers/admin";
+import { bountyRouter } from "./routers/bounty";
 import { itemRouter } from "./routers/item";
 import { leaderboardRouter } from "./routers/leaderboard";
 import { submissionRouter } from "./routers/submission";
@@ -11,6 +12,7 @@ export const appRouter = router({
   item: itemRouter,
   submission: submissionRouter,
   admin: adminRouter,
+  bounty: bountyRouter,
 });
 
 export type AppRouter = typeof appRouter;

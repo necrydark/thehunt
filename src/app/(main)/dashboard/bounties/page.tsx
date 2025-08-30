@@ -1,21 +1,18 @@
-// This is the users dashboard
-
-import DashboardClient from "@/components/dashboard/dashboard-client";
-import DashboardHeader from "@/components/dashboard/dashboard-header";
+import Bounties from "@/components/bounties/bounties";
+import BountiesHeader from "@/components/bounties/bounty-header";
 import { auth } from "@/lib/auth";
 // import db from "@/lib/db"
 import { headers } from "next/headers";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 export async function generateMetadata() {
   return {
-    title: `Dashboard`,
-    description: `View your dashboard to view your progress and other stats.`,
+    title: `Bounties`,
+    description: `View the bounties available during the hunt.`,
   };
 }
 
-export default async function DashboardPage() {
+export default async function BountiesPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -63,22 +60,6 @@ export default async function DashboardPage() {
     );
   }
 
-  if (session.user.profileCompleted === false) {
-    redirect("/complete-profile");
-  }
-
-  const user = session?.user;
-
-  // const items = await db.item.findMany();
-
-  // const userItems = await db.userItem.findMany({
-  //   where:{ userId: session?.user.id},
-  //   include: { item: true}
-  // })
-
-  // const obtainedItemsIds = new Set(userItems.map(ui => ui.itemId));
-  // const unobtainedItems = items.filter(item => !obtainedItemsIds.has(item.id));
-
   return (
     <div className="min-h-screen w-full relative">
       <div
@@ -91,16 +72,10 @@ export default async function DashboardPage() {
 
       <div className="h-full w-full relative z-10">
         <div className="container relative mx-auto px-4  pt-[15rem] pb-[5rem]">
-          <DashboardHeader
-            user={{
-              ...user,
-              role: user?.role ?? undefined,
-              totalPoints: user?.totalPoints ?? 0,
-              vaultHunter: user?.vaultHunter ?? "Moze",
-              platform: user?.platform ?? "PC",
-            }}
-          />
-          <DashboardClient />
+          {/* Bounty Stats */}
+          <BountiesHeader />
+          {/* All Bounties */}
+          <Bounties />
         </div>
       </div>
     </div>

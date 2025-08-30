@@ -4,6 +4,12 @@ import { Paperclip } from "lucide-react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+export async function generateMetadata() {
+  return {
+    title: `Submissions`,
+  };
+}
+
 export default async function SubmissionsAdminPage() {
   const session = await auth.api.getSession({
     headers: await headers(),

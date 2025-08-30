@@ -154,13 +154,19 @@ export default async function Home() {
                 />
               </div>
               <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-[#BBFE17] leading-tight">
-                  Raising Money for the Kids, One Bounty at a Time
-                </h2>
+                <div className="mb-4">
+                  <h2 className="text-3xl font-bold mb-1 text-[#BBFE17] leading-tight">
+                    What is The Hunt?
+                  </h2>
+                  <span className="text-sm text-muted-foreground">
+                    Raising Money for the Kids, One Bounty at a Time
+                  </span>
+                </div>
                 <p className="text-gray-300 text-lg leading-relaxed">
-                  Vault Hunters race to loot the rarest items in the game. The
-                  player who completes the list in the shortest time from new
-                  character creation will be crowned the Champion!
+                  The Hunt is a biannual event in which Vault Hunters race to
+                  loot the rarest items in the game. The player who completes
+                  the list in the shortest time from new character creation will
+                  be crowned the Champion!
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Badge className="bg-[#BBFE17]/20 text-[#BBFE17] border-[#BBFE17]/30 px-4 py-2">
@@ -285,7 +291,7 @@ export default async function Home() {
               {previous.map((prev, idx) => (
                 <Card
                   key={idx}
-                  className="group hover:shadow-2xl bg-black/60 backdrop-blur-sm border-[#BBFE17]/30 hover:border-[#BBFE17] shadow-lg hover:shadow-[#BBFE17]/30 transition-all duration-300 overflow-hidden h-full flex flex-col hover:scale-105"
+                  className="group hover:shadow-2xl bg-black/60 backdrop-blur-sm border-[#BBFE17]/30 hover:border-[#BBFE17] shadow-lg hover:shadow-[#BBFE17]/30 transition-all duration-300 overflow-hidden h-full flex flex-col"
                 >
                   <CardContent className="p-0 flex-1 flex flex-col">
                     <div className="relative overflow-hidden">
@@ -294,7 +300,7 @@ export default async function Home() {
                         alt={prev.name as string}
                         width={400}
                         height={250}
-                        className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="w-full h-48 object-contain group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                       <Badge className="absolute bg-gradient-to-r from-[#BBFE17] to-[#9FE317] top-4 right-4 text-black font-semibold px-3 py-1">

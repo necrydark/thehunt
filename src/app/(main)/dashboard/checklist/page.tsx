@@ -7,6 +7,13 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Link from "next/link";
 
+export async function generateMetadata() {
+  return {
+    title: `Your Checklist`,
+    description: `View your checklist for the weapons to collect during the hunt.`,
+  };
+}
+
 export default async function ChecklistPage() {
   const session = await auth.api.getSession({
     headers: await headers(),

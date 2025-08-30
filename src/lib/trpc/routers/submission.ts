@@ -25,8 +25,6 @@ export const submissionRouter = router({
         },
       });
 
-      console.log("Called");
-
       if (existingUserItem) {
         throw new TRPCError({
           code: "BAD_REQUEST",

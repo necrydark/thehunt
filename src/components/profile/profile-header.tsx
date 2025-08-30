@@ -75,6 +75,17 @@ export default function ProfileHeader({ user }: Props) {
               <Badge className={`bg-transparent border-current`}>
                 {user.role}
               </Badge>
+              <Button
+                className="bg-transparent hover:bg-primary-green/75 px-2 py-0.5 h-fit border-primary-green border-[1px] hover:text-black"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    `${BASE_URL}/profile/${user.name}`
+                  );
+                }}
+              >
+                <Clipboard className="h-4 w-4" />
+                Share
+              </Button>
             </div>
             <div className="flex items-center gap-6 text-sm text-gray-300">
               <span className="flex items-center gap-1">
@@ -93,19 +104,11 @@ export default function ProfileHeader({ user }: Props) {
                 {progress?.itemsObtained}/{items?.length} Weapons
               </span>
             </div>
-            <div>
-              <Button
-                className="bg-transparent hover:bg-primary-green/75 hover:text-black"
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    `${BASE_URL}/profile/${user.name}`
-                  );
-                }}
-              >
-                <Clipboard className="h-4 w-4" />
-                Share
-              </Button>
-            </div>
+            {user.description && (
+              <div className="border-primary-green border-[1px] rounded-md p-2">
+                {user.description}
+              </div>
+            )}
           </div>
         </div>
       </CardContent>

@@ -50,3 +50,22 @@ export const itemSchema = z.object({
   rarity: z.number().min(1).max(5),
   notes: z.string().optional(),
 });
+
+export const completeProfileSchema = z.object({
+  platform: z.string(),
+  vaultHunter: z.string(),
+  description: z.string().optional(),
+});
+
+export const bountySchema = z.object({
+  itemId: z.string(),
+  name: z.string(),
+  price: z.number().min(1),
+  description: z.string(),
+});
+
+export const bountyClaimSchema = z.object({
+  bountyId: z.string(),
+  twitchClipUrl: z.string().url(),
+  message: z.string().optional(),
+});
