@@ -1,9 +1,16 @@
 import Bounties from "@/components/bounties/bounties";
-import ChecklistHeader from "@/components/checklist/checklist-header";
+import BountiesHeader from "@/components/bounties/bounty-header";
 import { auth } from "@/lib/auth";
 // import db from "@/lib/db"
 import { headers } from "next/headers";
 import Link from "next/link";
+
+export async function generateMetadata() {
+  return {
+    title: `Bounties`,
+    description: `View the bounties available during the hunt.`,
+  };
+}
 
 export default async function BountiesPage() {
   const session = await auth.api.getSession({
@@ -53,8 +60,6 @@ export default async function BountiesPage() {
     );
   }
 
-  const user = session?.user;
-
   return (
     <div className="min-h-screen w-full relative">
       <div
@@ -68,7 +73,7 @@ export default async function BountiesPage() {
       <div className="h-full w-full relative z-10">
         <div className="container relative mx-auto px-4  pt-[15rem] pb-[5rem]">
           {/* Bounty Stats */}
-          <ChecklistHeader user={user} />
+          <BountiesHeader />
           {/* All Bounties */}
           <Bounties />
         </div>

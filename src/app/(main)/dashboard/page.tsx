@@ -8,6 +8,13 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+export async function generateMetadata() {
+  return {
+    title: `Dashboard`,
+    description: `View your dashboard to view your progress and other stats.`,
+  };
+}
+
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
     headers: await headers(),

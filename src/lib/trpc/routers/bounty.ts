@@ -1,6 +1,11 @@
 import { TRPCError } from "@trpc/server";
 import * as z from "zod";
-import { protectedProcedure, publicProcedure, router } from "../server";
+import {
+  adminProcedure,
+  protectedProcedure,
+  publicProcedure,
+  router,
+} from "../server";
 
 export const bountyRouter = router({
   getAll: publicProcedure
@@ -263,8 +268,8 @@ export const bountyRouter = router({
       // });
     }),
 
-  // Accept/Reject bounty claims (for bounty issuer)
-  updateClaim: protectedProcedure
+  // Accept/Reject bounty claims (for admins)
+  updateClaim: adminProcedure
     .input(
       z.object({
         claimId: z.string(),
@@ -358,4 +363,14 @@ export const bountyRouter = router({
         });
       });
     }),
+
+  getTotalPrizes: publicProcedure.query(async ({ ctx }) => {
+    const result = await ctx.db.bounty.aggregate({
+      _sum: {
+        price: true,
+      },
+    });
+
+    return result._sum.price || 0;
+  }),
 });

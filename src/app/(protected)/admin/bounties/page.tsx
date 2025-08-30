@@ -1,7 +1,9 @@
-import React from 'react'
+export async function generateMetadata() {
+  return {
+    title: `Bounties`,
+  };
+}
 
 export default function AdminBountiesPage() {
-  return (
-    <div>AdminBountiesPage</div>
-  )
+  return <div>AdminBountiesPage</div>;
 }

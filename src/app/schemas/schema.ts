@@ -63,3 +63,9 @@ export const bountySchema = z.object({
   price: z.number().min(1),
   description: z.string(),
 });
+
+export const bountyClaimSchema = z.object({
+  bountyId: z.string(),
+  twitchClipUrl: z.string().url(),
+  message: z.string().optional(),
+});

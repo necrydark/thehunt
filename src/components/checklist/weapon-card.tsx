@@ -228,8 +228,8 @@ export const WeaponCard = ({
                   Submit {weapon.name}
                 </DialogTitle>
                 <DialogDescription className="text-white">
-                  Provide evidence that you&apos;ve obtained this weapon.
-                  Include the Twitch clip link.
+                  Provide evidence that you&apos;ve obtained this item. Include
+                  the Twitch clip link.
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">

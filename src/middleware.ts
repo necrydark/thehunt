@@ -1,22 +1,9 @@
 import { getSessionCookie } from "better-auth/cookies";
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "./lib/auth";
-import { headers } from "next/headers";
-import db from "./lib/db";
-
-async function checkUserProfile(userId: string) {
-  const profile = await db.user.findUnique({
-    where: {id: userId},
-    select: {profileCompleted: true}
-  })
-  
-  return profile || false;
-}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const sessionCookie = getSessionCookie(request);
-
 
   // Define route patterns
   const isAuthPage =
@@ -30,15 +17,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-
   // Protect dashboard routes - require authentication
   if (isDashboardPage && !sessionCookie) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
-
-
 
   // Protect admin routes - require authentication
   // (role check will be handled at page/component level)
