@@ -166,7 +166,6 @@ model BountyClaim {
   bounty  Bounty @relation(fields: [bountyId], references: [id], onDelete: Cascade)
   claimer User   @relation(fields: [claimedBy], references: [id])
 
-  @@unique([bountyId, claimedBy])
   @@index([claimedBy])
   @@index([status])
 }

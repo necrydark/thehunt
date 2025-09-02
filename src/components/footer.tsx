@@ -70,6 +70,11 @@ export default function Footer() {
                 <FaX size={16} className="text-black" />
               </Button>
             </Link>
+            <Link href={"https://x.com/necrydark"} target="_blank">
+              <Button className="bg-primary-green cursor-pointer hover:bg-primary-green/75">
+                <FaX size={16} className="text-black" />
+              </Button>
+            </Link>
             <Link href={"https://www.youtube.com/ki11ersix"} target="_blank">
               <Button className="bg-primary-green cursor-pointer hover:bg-primary-green/75">
                 <FaYoutube size={16} className="text-black" />

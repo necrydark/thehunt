@@ -42,7 +42,7 @@ export default function BountiesHeader() {
   }
 
   const activeBounties = bounties?.filter((b) => b.status === "OPEN");
-  const claimedBounties = bounties?.filter((b) => b.status === "CLAIMED");
+  const completedBounties = bounties?.filter((b) => b.status === "COMPLETED");
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
       <Card className="bg-black/20 border-white/10 text-white">
@@ -61,9 +61,9 @@ export default function BountiesHeader() {
           <div className="flex items-center gap-3">
             <Medal className="h-8 w-8 text-orange-400" />
             <div>
-              <p className="text-sm text-gray-400">Claimed Bounties</p>
+              <p className="text-sm text-gray-400">Completed Bounties</p>
               <p className="text-2xl font-bold">
-                {claimedBounties?.length ?? 0}
+                {completedBounties?.length ?? 0}
               </p>
             </div>
           </div>
