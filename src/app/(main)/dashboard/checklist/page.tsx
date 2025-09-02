@@ -7,6 +7,13 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Link from "next/link";
 
+export async function generateMetadata() {
+  return {
+    title: `Your Checklist`,
+    description: `View your checklist for the weapons to collect during the hunt.`,
+  };
+}
+
 export default async function ChecklistPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -48,7 +55,9 @@ export default async function ChecklistPage() {
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-2">You are banned.</h2>
           {session?.user.banReason && <p>{session?.user.banReason}</p>}
-          <Link href={"/contact"}>Contact Support</Link>
+          <Link href={"https://discord.com/invite/aGgVEzvg"}>
+            Join The Discord
+          </Link>
           <span>to get unbanned.</span>
         </div>
       </div>

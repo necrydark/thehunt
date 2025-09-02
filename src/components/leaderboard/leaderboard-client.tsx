@@ -248,6 +248,16 @@ export default function LeaderboardPage() {
                       weapons ({user._count.userItems})
                     </span>
                   </div>
+                  {user.platform && user.vaultHunter && (
+                    <div className="flex justify-center flex-wrap gap-2">
+                      <Badge className="bg-black border-primary-green/75 text-primary-green">
+                        {user.platform}
+                      </Badge>
+                      <Badge className="bg-black border-primary-green/75 text-primary-green">
+                        {user.vaultHunter}
+                      </Badge>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
@@ -288,7 +298,7 @@ export default function LeaderboardPage() {
               {allUsers.map((user) => (
                 <div
                   key={user.id}
-                  className={`flex items-center gap-4 p-4 rounded-lg border transition-all hover:bg-white/5 ${getRankStyle(
+                  className={`flex sm:flex-row flex-col sm:justify-normal justify-center items-center gap-4 p-4 rounded-lg border transition-all hover:bg-white/5 ${getRankStyle(
                     user.rank
                   )}`}
                 >
@@ -305,7 +315,7 @@ export default function LeaderboardPage() {
 
                   {/* User Info */}
                   <div className="flex-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center sm:justify-normal sm:flex-row flex-col sm:mb-0 mb-2 justify-center gap-2">
                       <Link
                         href={`/profile/${user.name}`}
                         className="hover:underline"
@@ -327,10 +337,20 @@ export default function LeaderboardPage() {
                           : "N/A"}
                       </span>
                     </div>
+                    {user.platform && user.vaultHunter && (
+                      <div className="flex gap-2 mt-2 sm:justify-normal justify-center">
+                        <Badge className="bg-black border-primary-green/75 text-primary-green">
+                          {user.platform}
+                        </Badge>
+                        <Badge className="bg-black border-primary-green/75 text-primary-green">
+                          {user.vaultHunter}
+                        </Badge>
+                      </div>
+                    )}
                   </div>
 
                   {/* Points */}
-                  <div className="text-right">
+                  <div className="sm:text-right text-center">
                     <div className="text-xl font-bold text-yellow-400">
                       {user.totalPoints.toLocaleString()}
                     </div>

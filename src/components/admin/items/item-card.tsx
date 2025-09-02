@@ -132,8 +132,6 @@ export default function ItemCard({ item }: Props) {
     });
   };
 
-  console.log(item);
-
   return (
     <Card
       className={cn(

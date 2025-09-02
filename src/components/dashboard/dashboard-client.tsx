@@ -2,13 +2,14 @@
 
 import { authClient } from "@/lib/auth-client";
 import { api } from "@/lib/trpc/client";
-import { Trophy, Users } from "lucide-react";
+import { Award, Scroll, Trophy, Users } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/card";
@@ -42,6 +43,12 @@ export default function DashboardClient() {
     error: topRankError,
   } = api.leaderboard.getTopUsers.useQuery({ limit: 1 });
 
+  const {
+    data: bounties,
+    isLoading: bountiesLoading,
+    error: bountiesError,
+  } = api.bounty.getAll.useQuery({});
+
   // Add error logging to help debug
   if (progressError) {
     console.error("Progress error:", progressError);
@@ -50,7 +57,13 @@ export default function DashboardClient() {
     console.error("Items error:", itemsError);
   }
 
-  if (progressLoading || itemsLoading || rankLoading || topRankLoading) {
+  if (
+    progressLoading ||
+    itemsLoading ||
+    rankLoading ||
+    topRankLoading ||
+    bountiesLoading
+  ) {
     return (
       <div className="min-h-screen w-full relative">
         <div className="flex items-center justify-center min-h-[400px]">
@@ -61,7 +74,13 @@ export default function DashboardClient() {
   }
 
   // Add error handling
-  if (progressError || itemsError || rankError || topRankError) {
+  if (
+    progressError ||
+    itemsError ||
+    rankError ||
+    topRankError ||
+    bountiesError
+  ) {
     return (
       <div className="min-h-screen w-full relative">
         <div className="flex items-center justify-center min-h-[400px]">
@@ -70,7 +89,8 @@ export default function DashboardClient() {
             {progressError?.message ||
               itemsError?.message ||
               rankError?.message ||
-              topRankError?.message}
+              topRankError?.message ||
+              bountiesError?.message}
           </div>
         </div>
       </div>
@@ -84,11 +104,11 @@ export default function DashboardClient() {
     totalItems > 0 ? (obtainedItems / totalItems) * 100 : 0;
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 mt-8 lg:grid-cols-3">
+    <div className="grid gap-6 md:grid-cols-2 mt-8">
       <Card className="bg-black/20 border-white/10 text-white">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-yellow-400" />
+            <Scroll className="h-5 w-5 text-red-400" />
             Checklist
           </CardTitle>
           <CardDescription>
@@ -118,29 +138,7 @@ export default function DashboardClient() {
       <Card className="bg-black/20 border-white/10 text-white">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-blue-400" />
-            Profile & Stats
-          </CardTitle>
-          <CardDescription>View your progress</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Points</span>
-              <span>{progress?.totalPoints}</span>
-            </div>
-          </div>
-          <Link href={`/profile/${session?.user.name}`}>
-            <Button className="w-full mt-4 cursor-pointer bg-green-500 hover:bg-green-600 text-black">
-              View Profile
-            </Button>
-          </Link>
-        </CardContent>
-      </Card>
-      <Card className="bg-black/20 border-white/10 text-white">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-blue-400" />
+            <Award className="h-5 w-5 text-green-400" />
             Leaderboard
           </CardTitle>
           <CardDescription>View your rank on the leaderboard</CardDescription>
@@ -162,6 +160,58 @@ export default function DashboardClient() {
             </Button>
           </Link>
         </CardContent>
+      </Card>
+      <Card className="bg-black/20 border-white/10 text-white">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5 text-blue-400" />
+            Profile & Stats
+          </CardTitle>
+          <CardDescription>View your progress</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>Points</span>
+              <span>{progress?.totalPoints}</span>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="mt-auto w-full">
+          <Button
+            asChild
+            className="w-full mt-4 cursor-pointer bg-green-500 hover:bg-green-600 text-black"
+          >
+            <Link href={`/profile/${session?.user.name}`}>View Profile</Link>
+          </Button>
+        </CardFooter>
+      </Card>
+      <Card className="bg-black/20 border-white/10 text-white">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Trophy className="h-5 w-5 text-yellow-400" />
+            Bounties
+          </CardTitle>
+          <CardDescription>
+            View the available bounties to collect
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>Bounties Available</span>
+              <span>{bounties?.length}</span>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="mt-auto w-full">
+          <Button
+            asChild
+            className="w-full mt-4 cursor-pointer bg-green-500 hover:bg-green-600 text-black"
+          >
+            <Link href={`/dashboard/bounties`}>View Bounties</Link>
+          </Button>
+        </CardFooter>
       </Card>
     </div>
   );

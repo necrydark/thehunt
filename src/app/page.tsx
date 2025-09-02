@@ -5,8 +5,16 @@ import RulesSection from "@/components/home/rules-section";
 import { Navbar } from "@/components/navbar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { previous } from "@/data/data";
+import { getAllChangelogs } from "@/lib/changelogs";
 // import { auth } from "@/lib/auth";
 import { Calendar, Github } from "lucide-react";
 // import { headers } from "next/headers";
@@ -14,6 +22,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default async function Home() {
+  const changelogs = getAllChangelogs();
   return (
     <>
       <Navbar />
@@ -112,7 +121,7 @@ export default async function Home() {
                   href="https://github.com/necrydark/thehunt"
                   target="_blank"
                 >
-                  <Button className=" bg-green-500 mt-4 hover:bg-green-600 text-black font-semibold py-3 rounded-lg transition-all duration-300">
+                  <Button className=" bg-primary-green mt-4 hover:bg-primary-green/75 text-black font-semibold py-3 rounded-lg transition-all duration-300">
                     GitHub
                   </Button>
                 </Link>
@@ -121,6 +130,48 @@ export default async function Home() {
           </div>
         </section>
         <Carousels />
+
+        {/* Changelogs */}
+        <div className="w-full relative z-10">
+          <div className="container max-w-6xl mx-auto relative p-16 z-10">
+            <div className="mb-16 text-center">
+              <h1 className="text-5xl font-bold text-[#BBFE17] mb-6">
+                Changelogs
+              </h1>
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                View the recent website updates.
+              </p>
+            </div>
+            {changelogs?.slice(0, 2).map((changelog) => (
+              <Card
+                className="group bg-black/40 backdrop-blur-sm border-[#BBFE17]/30 hover:border-[#BBFE17] transition-all duration-300 hover:shadow-lg hover:shadow-[#BBFE17]/20"
+                key={changelog.slug}
+              >
+                <CardHeader>
+                  <CardTitle className="text-white">
+                    {changelog.data.title}
+                  </CardTitle>
+                  <CardDescription className="text-gray-300">
+                    {changelog.data.date}
+                  </CardDescription>
+                </CardHeader>
+                <CardFooter>
+                  <Button
+                    asChild
+                    className=" bg-primary-green mt-4 hover:bg-primary-green/75 text-black font-semibold py-3 rounded-lg transition-all duration-300"
+                  >
+                    <Link
+                      className="no-underline"
+                      href={`/changelogs/${changelog.slug}`}
+                    >
+                      Read More
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
         <div
           className="absolute inset-0 z-0"
           style={{
@@ -154,13 +205,19 @@ export default async function Home() {
                 />
               </div>
               <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-[#BBFE17] leading-tight">
-                  Raising Money for the Kids, One Bounty at a Time
-                </h2>
+                <div className="mb-4">
+                  <h2 className="text-3xl font-bold mb-1 text-[#BBFE17] leading-tight">
+                    What is The Hunt?
+                  </h2>
+                  <span className="text-sm text-muted-foreground">
+                    Raising Money for the Kids, One Bounty at a Time
+                  </span>
+                </div>
                 <p className="text-gray-300 text-lg leading-relaxed">
-                  Vault Hunters race to loot the rarest items in the game. The
-                  player who completes the list in the shortest time from new
-                  character creation will be crowned the Champion!
+                  The Hunt is a biannual event in which Vault Hunters race to
+                  loot the rarest items in the game. The player who completes
+                  the list in the shortest time from new character creation will
+                  be crowned the Champion!
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Badge className="bg-[#BBFE17]/20 text-[#BBFE17] border-[#BBFE17]/30 px-4 py-2">
@@ -285,7 +342,7 @@ export default async function Home() {
               {previous.map((prev, idx) => (
                 <Card
                   key={idx}
-                  className="group hover:shadow-2xl bg-black/60 backdrop-blur-sm border-[#BBFE17]/30 hover:border-[#BBFE17] shadow-lg hover:shadow-[#BBFE17]/30 transition-all duration-300 overflow-hidden h-full flex flex-col hover:scale-105"
+                  className="group hover:shadow-2xl bg-black/60 backdrop-blur-sm border-[#BBFE17]/30 hover:border-[#BBFE17] shadow-lg hover:shadow-[#BBFE17]/30 transition-all duration-300 overflow-hidden h-full flex flex-col"
                 >
                   <CardContent className="p-0 flex-1 flex flex-col">
                     <div className="relative overflow-hidden">
@@ -294,7 +351,7 @@ export default async function Home() {
                         alt={prev.name as string}
                         width={400}
                         height={250}
-                        className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="w-full h-48 object-contain group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                       <Badge className="absolute bg-gradient-to-r from-[#BBFE17] to-[#9FE317] top-4 right-4 text-black font-semibold px-3 py-1">

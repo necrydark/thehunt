@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, Home, Send, Swords, Users } from "lucide-react";
+import { Banknote, BookOpen, Home, Send, Swords, Users } from "lucide-react";
 
 import {
   Sidebar,
@@ -36,6 +36,16 @@ const items = [
     title: "Items",
     url: "/admin/items",
     icon: Swords,
+  },
+  {
+    title: "Bounties",
+    url: "/admin/bounties",
+    icon: Banknote,
+  },
+  {
+    title: "Claims",
+    url: "/admin/claims",
+    icon: Send,
   },
   {
     title: "Back To Main",

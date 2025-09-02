@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "@/lib/trpc/client";
-import { Check, Clock, Medal, Users } from "lucide-react";
+import { Banknote, Check, Clock, Medal, Users } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 
 export default function StatPanels() {
@@ -35,7 +35,7 @@ export default function StatPanels() {
   }
 
   return (
-    <div className="grid lg:grid-cols-4 grid-cols-2 gap-6 mb-8">
+    <div className="grid xl:grid-cols-5 grid-cols-2 gap-6 mb-8">
       <Card className="bg-black/30 backdrop-blur-sm border-white/10 text-white hover:bg-black/40 transition-all duration-300 group">
         <CardContent>
           <div className="flex items-center justify-between">
@@ -98,6 +98,21 @@ export default function StatPanels() {
             </div>
             <div className="p-3 rounded-full bg-purple-500/20 border border-purple-500/30">
               <Medal className="h-8 w-8 text-purple-400" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      <Card className="bg-black/30 backdrop-blur-sm border-white/10 text-white hover:bg-black/40 transition-all duration-300 group">
+        <CardContent>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-400 mb-1">Total Bounties</p>
+              <p className="text-3xl text-orange-400 font-bold  transition-transform">
+                {adminStats?.bounties.length}
+              </p>
+            </div>
+            <div className="p-3 rounded-full bg-orange-500/20 border border-orange-500/30">
+              <Banknote className="h-8 w-8 text-orange-400" />
             </div>
           </div>
         </CardContent>

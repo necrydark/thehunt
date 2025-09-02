@@ -6,6 +6,14 @@ import { auth } from "@/lib/auth";
 // import db from "@/lib/db"
 import { headers } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+export async function generateMetadata() {
+  return {
+    title: `Dashboard`,
+    description: `View your dashboard to view your progress and other stats.`,
+  };
+}
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
@@ -48,11 +56,17 @@ export default async function DashboardPage() {
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-2">You are banned.</h2>
           {session?.user.banReason && <p>{session?.user.banReason}</p>}
-          <Link href={"/contact"}>Contact Support</Link>
+          <Link href={"https://discord.com/invite/aGgVEzvg"}>
+            Join The Discord
+          </Link>
           <span>to get unbanned.</span>
         </div>
       </div>
     );
+  }
+
+  if (session.user.profileCompleted === false) {
+    redirect("/complete-profile");
   }
 
   const user = session?.user;
@@ -84,6 +98,8 @@ export default async function DashboardPage() {
               ...user,
               role: user?.role ?? undefined,
               totalPoints: user?.totalPoints ?? 0,
+              vaultHunter: user?.vaultHunter ?? "Moze",
+              platform: user?.platform ?? "PC",
             }}
           />
           <DashboardClient />

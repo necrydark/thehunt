@@ -25,8 +25,6 @@ export const submissionRouter = router({
         },
       });
 
-      console.log("Called");
-
       if (existingUserItem) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -132,7 +130,6 @@ export const submissionRouter = router({
               type: true,
             },
           },
-          // Don't include adminReviewer info for public view
         },
         orderBy: { submittedAt: "desc" },
         take: input.limit,

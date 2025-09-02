@@ -156,6 +156,7 @@ export const userRouter = router({
                 where: { status: "APPROVED" },
               },
               userItems: true,
+              bountyClaims: true,
             },
           },
           submissions: {
@@ -173,6 +174,7 @@ export const userRouter = router({
         totalPoints: user.totalPoints || 0,
         itemsObtained: user._count.userItems,
         approvedSubmissions: user._count.submissions,
+        bountyClaims: user._count.bountyClaims,
       };
     }),
 
@@ -188,6 +190,27 @@ export const userRouter = router({
         where: { id: input.userId },
         data: {
           role: input.role,
+        },
+      });
+    }),
+
+  complete: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        platform: z.string(),
+        vaultHunter: z.string(),
+        description: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.user.update({
+        where: { id: input.userId },
+        data: {
+          platform: input.platform,
+          vaultHunter: input.vaultHunter,
+          profileCompleted: true,
+          description: input.description,
         },
       });
     }),

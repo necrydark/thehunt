@@ -22,6 +22,17 @@ export const submissionReview = z.object({
   rejectionReason: z.string().optional(),
 });
 
+export const bountyReview = z.object({
+  id: z.string(),
+  status: z.enum(["OPEN", "CANCELLED"]),
+});
+
+export const claimReview = z.object({
+  id: z.string(),
+  status: z.enum(["ACCEPTED", "REJECTED"]),
+  feedback: z.string().optional(),
+});
+
 export const banUserSchema = z.object({
   userId: z.string(),
   banReason: z.string().optional(),
@@ -49,4 +60,22 @@ export const itemSchema = z.object({
   missionType: z.string(),
   rarity: z.number().min(1).max(5),
   notes: z.string().optional(),
+});
+
+export const completeProfileSchema = z.object({
+  platform: z.string(),
+  vaultHunter: z.string(),
+  description: z.string().optional(),
+});
+
+export const bountySchema = z.object({
+  title: z.string(),
+  price: z.number().min(1),
+  description: z.string(),
+});
+
+export const bountyClaimSchema = z.object({
+  bountyId: z.string(),
+  twitchClipUrl: z.string().url(),
+  message: z.string().optional(),
 });

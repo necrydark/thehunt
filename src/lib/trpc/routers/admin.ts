@@ -7,6 +7,7 @@ export const adminRouter = router({
     const items = await ctx.db.item.findMany();
     const userCount = await ctx.db.user.count();
     const reviews = await ctx.db.submission.findMany();
+    const bounties = await ctx.db.bounty.findMany();
     const totalPointsAggregate = await ctx.db.user.aggregate({
       _sum: {
         totalPoints: true,
@@ -20,6 +21,7 @@ export const adminRouter = router({
       weaponCount,
       users,
       items,
+      bounties,
     };
   }),
 

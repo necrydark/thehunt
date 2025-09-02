@@ -30,6 +30,28 @@ export const auth = betterAuth({
         required: false, // Added this
         defaultValue: 0,
       },
+      platform: {
+        type: "string",
+        input: true,
+        required: false,
+        defaultValue: "PC",
+      },
+      vaultHunter: {
+        type: "string",
+        input: true,
+        required: false,
+      },
+      profileCompleted: {
+        type: "boolean",
+        input: false,
+        required: false,
+        defaultValue: false,
+      },
+      description: {
+        type: "string",
+        input: true,
+        required: false,
+      },
     },
   },
 

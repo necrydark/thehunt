@@ -4,6 +4,12 @@ import { Box } from "lucide-react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+export async function generateMetadata() {
+  return {
+    title: `Items`,
+  };
+}
+
 export default async function ItemsAdminPage() {
   const session = await auth.api.getSession({
     headers: await headers(),

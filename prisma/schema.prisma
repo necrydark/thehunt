@@ -9,23 +9,31 @@ datasource db {
 }
 
 model User {
-  id                  String       @id @default(cuid())
-  name                String       @unique
-  email               String?      @unique
-  image               String?
-  createdAt           DateTime
-  updatedAt           DateTime
-  role                String
-  banned              Boolean?
-  banReason           String?
-  banExpire           DateTime?
-  totalPoints         Int?         @default(0)
-  emailVerified       Boolean?
-  reviewedSubmissions Submission[] @relation("AdminReviews")
+  id               String    @id @default(cuid())
+  name             String    @unique
+  email            String?   @unique
+  image            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  description      String?
+  role             String    @default("Participant")
+  banned           Boolean?  @default(false)
+  banReason        String?
+  banExpire        DateTime?
+  totalPoints      Int       @default(0)
+  emailVerified    Boolean   @default(false)
+  platform         String?
+  vaultHunter      String?
+  profileCompleted Boolean   @default(false)
+
+  // Relations
+  reviewedSubmissions Submission[]  @relation("AdminReviews")
   submissions         Submission[]
   userItems           UserItem[]
   accounts            Account[]
   sessions            Session[]
+  issuedBounties      Bounty[]      @relation("BountyIssuer")
+  bountyClaims        BountyClaim[]
 
   @@map("user")
 }
@@ -124,6 +132,58 @@ model UserItem {
   @@id([userId, itemId])
   @@index([userId])
   @@index([itemId])
+}
+
+model Bounty {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  price       Int
+  issuedBy    String
+  status      BountyStatus @default(PENDING)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relations
+  issuer User          @relation("BountyIssuer", fields: [issuedBy], references: [id])
+  claims BountyClaim[]
+
+  @@index([status])
+  @@index([issuedBy])
+}
+
+model BountyClaim {
+  id        String            @id @default(cuid())
+  bountyId  String
+  claimedBy String
+  status    BountyClaimStatus @default(PENDING)
+  message   String?
+  claimedAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt // Add for tracking status changes
+  clipUrl   String
+
+  // Relations  
+  bounty  Bounty @relation(fields: [bountyId], references: [id], onDelete: Cascade)
+  claimer User   @relation(fields: [claimedBy], references: [id])
+
+  @@index([claimedBy])
+  @@index([status])
+}
+
+enum BountyClaimStatus {
+  PENDING // Waiting for issuer response
+  ACCEPTED // Issuer accepted this claim
+  REJECTED // Issuer rejected this claim  
+  COMPLETED // Transaction completed
+}
+
+enum BountyStatus {
+  PENDING // Waiting for approval from admins
+  OPEN // Available to claim
+  CLAIMED // Someone claimed it  
+  COMPLETED // Work done, bounty paid
+  CANCELLED // Issuer cancelled or admin cancelled
+  EXPIRED // Past expiration
 }
 
 enum SubmissionStatus {
