@@ -47,10 +47,8 @@ export default async function Post(props: any) {
           </div>
         </div>
 
-        <div className="!text-white">
-          <ReactMarkdown className="prose prose-invert">
-            {post.content}
-          </ReactMarkdown>
+        <div className="!text-white prose prose-invert">
+          <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
       </article>
     </div>
