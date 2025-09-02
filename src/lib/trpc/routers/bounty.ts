@@ -1,3 +1,4 @@
+import { BountyClaimStatus } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 import {
@@ -11,6 +12,18 @@ export const bountyRouter = router({
   getAll: publicProcedure
     .input(
       z.object({
+        status: z
+          .enum([
+            "PENDING",
+            "OPEN",
+            "CLAIMED",
+            "COMPLETED",
+            "CANCELLED",
+            "EXPIRED",
+          ])
+          .optional(),
+        limit: z.number().default(50).optional(),
+        offset: z.number().default(0),
         search: z.string().optional(),
       })
     )
@@ -31,7 +44,6 @@ export const bountyRouter = router({
       return await ctx.db.bounty.findMany({
         where,
         include: {
-          item: true,
           issuer: {
             select: {
               name: true,
@@ -40,6 +52,53 @@ export const bountyRouter = router({
             },
           },
         },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: input.limit,
+        skip: input.offset,
+      });
+    }),
+
+  getAllClaims: publicProcedure
+    .input(
+      z.object({
+        status: z
+          .enum([
+            "PENDING",
+            "OPEN",
+            "CLAIMED",
+            "COMPLETED",
+            "CANCELLED",
+            "EXPIRED",
+          ])
+          .optional(),
+        limit: z.number().default(50).optional(),
+        offset: z.number().default(0),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      return await ctx.db.bountyClaim.findMany({
+        where: {
+          ...(input.status && {
+            status: input.status as BountyClaimStatus,
+          }),
+        },
+        include: {
+          claimer: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
+          bounty: true,
+        },
+        orderBy: {
+          claimedAt: "desc",
+        },
+        take: input.limit,
+        skip: input.offset,
       });
     }),
 
@@ -49,45 +108,19 @@ export const bountyRouter = router({
         title: z.string(),
         price: z.number(),
         description: z.string().optional(),
-        itemId: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      // Check if a bounty already exists for the given itemId
-      const existingBounty = await ctx.db.bounty.findFirst({
-        where: { itemId: input.itemId },
-      });
-
-      if (existingBounty) {
-        throw new TRPCError({
-          code: "CONFLICT",
-          message: "A bounty already exists for this item.",
-        });
-      }
-
-      const item = await ctx.db.item.findUnique({
-        where: { id: input.itemId },
-      });
-
-      if (!item) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Item not found",
-        });
-      }
-
       // Create the new bounty
       return await ctx.db.bounty.create({
         data: {
           title: input.title,
           price: input.price,
           description: input.description,
-          itemId: input.itemId,
           issuedBy: ctx.user.id,
-          status: "OPEN",
+          status: "PENDING",
         },
         include: {
-          item: true,
           issuer: {
             select: {
               id: true,
@@ -96,6 +129,30 @@ export const bountyRouter = router({
             },
           },
         },
+      });
+    }),
+
+  //Review the bounties submitted.
+  reviewBounty: adminProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        status: z.enum(["OPEN", "CANCELLED"]),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.$transaction(async (tx) => {
+        const bounty = await tx.bounty.update({
+          where: { id: input.id },
+          data: {
+            status: input.status,
+            updatedAt: new Date(),
+          },
+          include: {
+            issuer: true,
+          },
+        });
+        return bounty;
       });
     }),
 
@@ -143,7 +200,6 @@ export const bountyRouter = router({
           id: true,
           issuedBy: true,
           issuer: true,
-          item: true,
           price: true,
           status: true,
           title: true,
@@ -170,7 +226,6 @@ export const bountyRouter = router({
     .mutation(async ({ input, ctx }) => {
       const bounty = await ctx.db.bounty.findUnique({
         where: { id: input.bountyId },
-        include: { item: true },
       });
 
       if (!bounty) {
@@ -183,7 +238,8 @@ export const bountyRouter = router({
       if (bounty.status !== "OPEN") {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "This bounty is no longer available",
+          message:
+            "This bounty is no longer available or is not accepting submissions.",
         });
       }
 
@@ -227,7 +283,6 @@ export const bountyRouter = router({
           include: {
             bounty: {
               include: {
-                item: true,
                 issuer: {
                   select: {
                     id: true,
@@ -247,33 +302,14 @@ export const bountyRouter = router({
           },
         });
       });
-
-      // return await ctx.db.bountyClaim.create({
-      //   data: {
-      //     clipUrl: input.twitchClipUrl,
-      //     bountyId: input.bountyId,
-      //     message: input.message,
-      //     claimedBy: ctx.user.id,
-      //   },
-      //   include: {
-      //     bounty: true,
-      //     claimer: {
-      //       select: {
-      //         id: true,
-      //         name: true,
-      //         image: true,
-      //       },
-      //     },
-      //   },
-      // });
     }),
 
   // Accept/Reject bounty claims (for admins)
-  updateClaim: adminProcedure
+  reviewClaim: adminProcedure
     .input(
       z.object({
         claimId: z.string(),
-        action: z.enum(["ACCEPT", "REJECT"]),
+        status: z.enum(["ACCEPTED", "REJECTED"]),
         feedback: z.string().optional(),
       })
     )
@@ -310,7 +346,7 @@ export const bountyRouter = router({
       }
 
       return await ctx.db.$transaction(async (tx) => {
-        if (input.action === "ACCEPT") {
+        if (input.status === "ACCEPTED") {
           // Update bounty status to completed
           await tx.bounty.update({
             where: { id: claim.bountyId },
@@ -350,7 +386,6 @@ export const bountyRouter = router({
           include: {
             bounty: {
               include: {
-                item: true,
                 issuer: {
                   select: { id: true, name: true, image: true },
                 },
@@ -373,4 +408,33 @@ export const bountyRouter = router({
 
     return result._sum.price || 0;
   }),
+
+  getUserClaimsByUsername: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        limit: z.number().default(10), // Smaller default for public view
+        offset: z.number().default(0),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      if (!input.userId) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found or User ID not valid.",
+        });
+      }
+
+      return await ctx.db.bountyClaim.findMany({
+        where: {
+          claimedBy: input.userId,
+        },
+        include: {
+          bounty: true,
+        },
+        orderBy: { claimedAt: "desc" },
+        take: input.limit,
+        skip: input.offset,
+      });
+    }),
 });

@@ -1,20 +1,19 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/trpc/client";
 import { useState } from "react";
-import SubmissionCard from "./submissions-card";
+import BountyCard from "./bounty-card";
 
 const ITEMS_PER_PAGE = 20;
 
-export default function SubmissionsTable() {
+export default function BountiesTable() {
   const [page, setPage] = useState(0);
 
   const {
-    data: submissions,
-    isLoading: submissionsLoading,
-    error: submissionsError,
-  } = api.submission.getAll.useQuery({
+    data: bounties,
+    isLoading: bountiesLoading,
+    error: bountiesError,
+  } = api.bounty.getAll.useQuery({
     limit: ITEMS_PER_PAGE,
     offset: page * ITEMS_PER_PAGE,
   });
@@ -25,70 +24,58 @@ export default function SubmissionsTable() {
     error: adminStatsError,
   } = api.admin.getAllStats.useQuery();
 
-  if (adminStatsLoading || submissionsLoading) {
+  if (adminStatsLoading || bountiesLoading) {
     return (
       <div className="relative mt-8">
         <div className="flex items-center flex-col space-y-8 justify-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-green" />
           <h1 className="mt-8 text-3xl text-primary-green">
-            Loading Submissions...
+            Loading Bounties...
           </h1>
         </div>
       </div>
     );
   }
 
-  if (adminStatsError || submissionsError) {
+  if (adminStatsError || bountiesError) {
     return (
       <div className=" relative">
         <div className="flex items-center justify-center">
           <div className="text-red-500">
             Error loading data:{" "}
-            {adminStatsError?.message || submissionsError?.message}
+            {adminStatsError?.message || bountiesError?.message}
           </div>
         </div>
       </div>
     );
   }
 
-  const getSubmissionUser = (userId: string) => {
+  const getBountyIssuer = (userId: string) => {
     return adminStats?.users.find((u) => u.id === userId);
-  };
-
-  const getSubmissionItem = (itemId: string) => {
-    return adminStats?.items.find((i) => i.id === itemId);
   };
 
   return (
     <div className="relative space-y-8 z-10">
-      {submissions && submissions.length > 0 ? (
+      {bounties && bounties.length > 0 ? (
         <>
-          {submissions.map((submission) => {
-            const user = getSubmissionUser(submission.userId);
-            const item = getSubmissionItem(submission.itemId);
-            if (!user || !item) {
+          {bounties.map((bounty) => {
+            const issuer = getBountyIssuer(bounty.issuedBy);
+            if (!issuer) {
               return null;
             }
+
             return (
-              <SubmissionCard
-                key={submission.id}
-                item={{
-                  ...item,
-                  createdAt: new Date(item.createdAt),
-                  updatedAt: new Date(item.updatedAt),
+              <BountyCard
+                key={bounty.id}
+                issuer={{
+                  name: issuer.name,
+                  image: issuer.image,
+                  id: issuer.id,
                 }}
-                user={{
-                  ...user,
-                  createdAt: new Date(user.createdAt),
-                  updatedAt: new Date(user.updatedAt),
-                  banExpire: user.banExpire ? new Date(user.banExpire) : null,
-                }}
-                submission={{
-                  ...submission,
-                  submittedAt: new Date(submission.submittedAt),
-                  reviewedAt: submission.reviewedAt
-                    ? new Date(submission.reviewedAt)
-                    : null,
+                bounty={{
+                  ...bounty,
+                  createdAt: new Date(bounty.createdAt),
+                  updatedAt: new Date(bounty.updatedAt),
                 }}
               />
             );
@@ -110,7 +97,7 @@ export default function SubmissionsTable() {
 
             <Button
               onClick={() => setPage((p) => p + 1)}
-              disabled={!submissions || submissions.length < ITEMS_PER_PAGE}
+              disabled={!bounties || bounties.length < ITEMS_PER_PAGE}
               className="text-black hover:opacity-90 bg-primary-green hover:bg-primary-green/75 "
             >
               Next
@@ -120,7 +107,7 @@ export default function SubmissionsTable() {
       ) : (
         <div className="pt-[5rem]">
           <h1 className="text-center text-3xl text-primary-green">
-            There are currently no user submissions available.
+            There are currently no bounties available.
           </h1>
         </div>
       )}

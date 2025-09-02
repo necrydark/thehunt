@@ -1,9 +1,41 @@
+import BountiesTable from "@/components/admin/bounties/bounties-table";
+import { auth } from "@/lib/auth";
+import { Paperclip } from "lucide-react";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+
 export async function generateMetadata() {
   return {
     title: `Bounties`,
   };
 }
 
-export default function AdminBountiesPage() {
-  return <div>AdminBountiesPage</div>;
+export default async function AdminBountiesPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (
+    !session ||
+    (session.user.role !== "Admin" && session.user.role !== "Reviewer")
+  ) {
+    redirect("/");
+  }
+
+  if (session.user.banned) {
+    redirect("/");
+  }
+
+  return (
+    <div className="container mx-auto relative z-10 px-4 py-8">
+      <div className="flex gap-1 items-center mb-8">
+        <Paperclip className="h-8 w-8 text-primary-green" />
+
+        <h1 className="text-3xl text-white leading-tight font-bold">
+          Bounties
+        </h1>
+      </div>
+      <BountiesTable />
+    </div>
+  );
 }

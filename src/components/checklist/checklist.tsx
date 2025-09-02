@@ -1,7 +1,6 @@
 "use client";
 
 import { api } from "@/lib/trpc/client";
-import axios from "axios";
 import { Search } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -30,37 +29,6 @@ export default function Checklist() {
     },
     onError: (error) => {
       toast.error("Failed to submit evidence. Please try again.");
-      console.error("Submission error:", error);
-    },
-  });
-
-  const bountyMutation = api.bounty.create.useMutation({
-    onSuccess: async (createdBounty, variables) => {
-      toast("Bounty Created");
-      utils.bounty.getAll.invalidate();
-
-      try {
-        const response = await axios.post<{ success: boolean }>(
-          "/api/discord-webhook",
-          {
-            title: variables.title,
-            price: variables.price,
-            description: variables.description ?? "",
-            issuerName: createdBounty.issuer.name,
-            itemName: createdBounty.item.name,
-            mentionRole: true,
-          }
-        );
-
-        if (response.data.success) {
-          console.log("Discord notification sent successfully");
-        }
-      } catch (err) {
-        console.error("Error sending message to Discord:", err);
-      }
-    },
-    onError: (error) => {
-      toast.error("Failed to submit bounty. Please try again.");
       console.error("Submission error:", error);
     },
   });
@@ -110,18 +78,6 @@ export default function Checklist() {
       });
     },
     [submitMutation]
-  );
-
-  const handleBountySubmit = useCallback(
-    (itemId: string, title: string, price: number, description: string) => {
-      bountyMutation.mutate({
-        itemId,
-        price,
-        title,
-        description,
-      });
-    },
-    [bountyMutation]
   );
 
   const mergedItems = useMemo(() => {
@@ -232,7 +188,6 @@ export default function Checklist() {
             key={weapon.id}
             weapon={weapon}
             onSubmit={handleSubmit}
-            bountySubmit={handleBountySubmit}
             isSubmitting={submitMutation.isPending}
           />
         ))}

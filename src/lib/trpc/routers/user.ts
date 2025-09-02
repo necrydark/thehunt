@@ -156,6 +156,7 @@ export const userRouter = router({
                 where: { status: "APPROVED" },
               },
               userItems: true,
+              bountyClaims: true,
             },
           },
           submissions: {
@@ -173,6 +174,7 @@ export const userRouter = router({
         totalPoints: user.totalPoints || 0,
         itemsObtained: user._count.userItems,
         approvedSubmissions: user._count.submissions,
+        bountyClaims: user._count.bountyClaims,
       };
     }),
 

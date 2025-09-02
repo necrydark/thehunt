@@ -22,6 +22,17 @@ export const submissionReview = z.object({
   rejectionReason: z.string().optional(),
 });
 
+export const bountyReview = z.object({
+  id: z.string(),
+  status: z.enum(["OPEN", "CANCELLED"]),
+});
+
+export const claimReview = z.object({
+  id: z.string(),
+  status: z.enum(["ACCEPTED", "REJECTED"]),
+  feedback: z.string().optional(),
+});
+
 export const banUserSchema = z.object({
   userId: z.string(),
   banReason: z.string().optional(),
@@ -58,8 +69,7 @@ export const completeProfileSchema = z.object({
 });
 
 export const bountySchema = z.object({
-  itemId: z.string(),
-  name: z.string(),
+  title: z.string(),
   price: z.number().min(1),
   description: z.string(),
 });

@@ -310,11 +310,6 @@ export default function UserCard({ user }: Props) {
                               mode="single"
                               selected={field.value}
                               onSelect={(date) => {
-                                console.log(
-                                  "Selected date:",
-                                  date,
-                                  typeof date
-                                );
                                 field.onChange(date);
                               }}
                               disabled={(date) => date < new Date()}

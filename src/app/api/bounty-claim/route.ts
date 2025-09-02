@@ -3,20 +3,18 @@ import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 type RequestBody = {
-  title: string;
-  price: number;
-  issuerName: string;
-  itemName: string;
-  description?: string;
+  bountyId: string;
+  twitchClipUrl: string;
+  message?: string;
   mentionRole?: boolean;
 };
 
 export async function POST(request: NextRequest) {
   try {
     const body: RequestBody = await request.json();
-    const { title, price, issuerName, description, mentionRole = true } = body;
+    const { bountyId, twitchClipUrl, message, mentionRole = true } = body;
 
-    if (!title || !price || !issuerName) {
+    if (!bountyId || !message || !twitchClipUrl) {
       return NextResponse.json(
         { error: "All fields are required" },
         { status: 400 }
@@ -32,27 +30,22 @@ export async function POST(request: NextRequest) {
     }
 
     const embed = {
-      title: "🎯 New Bounty Submitted!",
+      title: "🎯 Bounty Claimed!",
       color: 0x7c3aed,
       fields: [
         {
           name: "📋 Title",
-          value: title,
+          value: bountyId,
           inline: false,
         },
         {
-          name: "💰 Price",
-          value: `${price.toLocaleString()} points`,
+          name: "📷 Twitch Clip URL",
+          value: twitchClipUrl,
           inline: true,
         },
         {
-          name: "🎯 Description",
-          value: description,
-          inline: true,
-        },
-        {
-          name: "👤 Issued by",
-          value: issuerName,
+          name: "🎯 Message",
+          value: message,
           inline: true,
         },
       ],
