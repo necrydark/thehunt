@@ -12,8 +12,6 @@ type RequestBody = {
 };
 
 export async function POST(request: NextRequest) {
-  console.log("API route hit: POST");
-
   try {
     const body: RequestBody = await request.json();
     const { title, price, issuerName, description, mentionRole = true } = body;

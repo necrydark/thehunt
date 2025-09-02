@@ -37,19 +37,12 @@ export default function Bounties() {
       utils.bounty.getAll.invalidate();
 
       try {
-        const response = await axios.post<{ success: boolean }>(
-          "/api/bounty-claim",
-          {
-            bountyId: variables.bountyId,
-            twtichClipUrl: variables.twitchClipUrl,
-            message: variables.message ?? "",
-            mentionRole: true,
-          }
-        );
-
-        if (response.data.success) {
-          console.log("Discord notification sent successfully");
-        }
+        await axios.post<{ success: boolean }>("/api/bounty-claim", {
+          bountyId: variables.bountyId,
+          twtichClipUrl: variables.twitchClipUrl,
+          message: variables.message ?? "",
+          mentionRole: true,
+        });
       } catch (err) {
         console.error("Error sending message to Discord:", err);
       }
@@ -66,20 +59,13 @@ export default function Bounties() {
       utils.bounty.getAll.invalidate();
 
       try {
-        const response = await axios.post<{ success: boolean }>(
-          "/api/discord-webhook",
-          {
-            title: variables.title,
-            price: variables.price,
-            description: variables.description ?? "",
-            issuerName: createdBounty.issuer.name,
-            mentionRole: true,
-          }
-        );
-
-        if (response.data.success) {
-          console.log("Discord notification sent successfully");
-        }
+        await axios.post<{ success: boolean }>("/api/discord-webhook", {
+          title: variables.title,
+          price: variables.price,
+          description: variables.description ?? "",
+          issuerName: createdBounty.issuer.name,
+          mentionRole: true,
+        });
       } catch (err) {
         console.error("Error sending message to Discord:", err);
       }

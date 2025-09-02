@@ -10,8 +10,6 @@ type RequestBody = {
 };
 
 export async function POST(request: NextRequest) {
-  console.log("API route hit: POST");
-
   try {
     const body: RequestBody = await request.json();
     const { bountyId, twitchClipUrl, message, mentionRole = true } = body;

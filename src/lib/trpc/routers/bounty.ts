@@ -408,4 +408,33 @@ export const bountyRouter = router({
 
     return result._sum.price || 0;
   }),
+
+  getUserClaimsByUsername: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        limit: z.number().default(10), // Smaller default for public view
+        offset: z.number().default(0),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      if (!input.userId) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found or User ID not valid.",
+        });
+      }
+
+      return await ctx.db.bountyClaim.findMany({
+        where: {
+          claimedBy: input.userId,
+        },
+        include: {
+          bounty: true,
+        },
+        orderBy: { claimedAt: "desc" },
+        take: input.limit,
+        skip: input.offset,
+      });
+    }),
 });
