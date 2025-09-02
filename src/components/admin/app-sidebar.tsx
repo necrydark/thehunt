@@ -43,6 +43,11 @@ const items = [
     icon: Banknote,
   },
   {
+    title: "Claims",
+    url: "/admin/claims",
+    icon: Send,
+  },
+  {
     title: "Back To Main",
     url: "/",
     icon: BookOpen,

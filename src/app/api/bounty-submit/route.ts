@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!process.env.DISCORD_ADMIN_WEBHOOK_URL) {
+    if (!process.env.DISCORD_WEBHOOK_URL) {
       console.error("DISCORD_WEBHOOK_URL environment variable is not set");
       return NextResponse.json(
         { error: "Server configuration error" },
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     const embed = {
-      title: "🎯 New Bounty Submitted!",
+      title: "🎯 New Bounty Created!",
       color: 0x7c3aed,
       fields: [
         {
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
       },
     };
 
-    const roleId = process.env.DISCORD_ADMIN_ROLE_ID;
+    const roleId = process.env.DISCORD_BOUNTY_ROLE_ID;
 
     const payload: any = {
       embeds: [embed],
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
       };
     }
 
-    await axios.post(process.env.DISCORD_ADMIN_WEBHOOK_URL, payload);
+    await axios.post(process.env.DISCORD_WEBHOOK_URL, payload);
 
     return NextResponse.json({ success: true });
   } catch (error) {

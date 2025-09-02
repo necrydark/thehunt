@@ -85,6 +85,21 @@ export default function AdminAnalytics() {
               </div>
               <div className="text-sm text-gray-400">Completion Rate</div>
             </div>
+            <div className="space-y-1">
+              <div className="text-2xl font-bold text-fuchsia-400">
+                {adminStats?.bounties.length}
+              </div>
+              <div className="text-sm text-gray-400">Bounties Created</div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-2xl font-bold text-indigo-400">
+                {
+                  adminStats?.bounties.filter((b) => b.status === "COMPLETED")
+                    .length
+                }
+              </div>
+              <div className="text-sm text-gray-400">Bounties Completed</div>
+            </div>
           </div>
         </CardContent>
       </Card>

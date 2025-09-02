@@ -1,5 +1,5 @@
 "use client";
-import { submissionReview } from "@/app/schemas/schema";
+import { claimReview } from "@/app/schemas/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,11 +20,10 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { itemTypes } from "@/lib/item-changes";
 import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Item, Submission, User } from "@prisma/client";
+import { BountyClaim } from "@prisma/client";
 import { Calendar, CheckCircle, Eye, XCircle } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -33,25 +32,28 @@ import { toast } from "sonner";
 import * as z from "zod";
 
 type Props = {
-  submission: Submission;
-  item: Item;
-  user: User;
+  claimer: {
+    id: string;
+    name: string;
+    image: string | null;
+  };
+  claim: BountyClaim;
 };
 
-type SubmissionValues = z.infer<typeof submissionReview>;
+type ClaimValues = z.infer<typeof claimReview>;
 
-export default function SubmissionCard({ submission, item, user }: Props) {
+export default function ClaimsCard({ claimer, claim }: Props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const utils = api.useUtils();
 
-  const updateMutation = api.submission.review.useMutation({
+  const updateMutation = api.bounty.reviewClaim.useMutation({
     onSuccess: async () => {
-      toast("Review Submitted");
+      toast("Claim Reviewed");
       form.reset();
       setIsDialogOpen(false);
 
-      await utils.submission.getAll.invalidate();
+      await utils.bounty.getAll.invalidate();
     },
     onError: (err) => {
       toast.error("Failed to submit review. Please try again");
@@ -59,30 +61,30 @@ export default function SubmissionCard({ submission, item, user }: Props) {
     },
   });
 
-  const form = useForm<SubmissionValues>({
-    resolver: zodResolver(submissionReview),
+  const form = useForm<ClaimValues>({
+    resolver: zodResolver(claimReview),
     defaultValues: {
       id: "",
-      rejectionReason: "",
       status: "REJECTED",
+      feedback: "",
     },
   });
 
-  const handleSubmit = (data: SubmissionValues) => {
+  const handleSubmit = (data: ClaimValues) => {
     updateMutation.mutate({
-      id: data.id,
+      claimId: data.id,
       status: data.status,
-      rejectionReason: data.rejectionReason,
+      feedback: data.feedback,
     });
   };
 
-  const handleApprove = async () => {
-    form.setValue("status", "APPROVED");
+  const handleAccept = async () => {
+    form.setValue("status", "ACCEPTED");
     try {
       await form.handleSubmit(handleSubmit)();
-      setIsDialogOpen(false); // Close dialog after successful submission
+      setIsDialogOpen(false);
     } catch (error) {
-      console.error("Approval failed:", error);
+      console.error("Open failed:", error);
     }
   };
 
@@ -90,15 +92,15 @@ export default function SubmissionCard({ submission, item, user }: Props) {
     form.setValue("status", "REJECTED");
     try {
       await form.handleSubmit(handleSubmit)();
-      setIsDialogOpen(false); // Close dialog after successful submission
+      setIsDialogOpen(false);
     } catch (error) {
-      console.error("Rejection failed:", error);
+      console.error("Cancelled failed:", error);
     }
   };
 
   return (
     <Card
-      key={submission.id}
+      key={claim.id}
       className="border border-white/10 rounded-xl p-6 bg-black/20 backdrop-blur-sm hover:bg-black/30 transition-all duration-300 group"
     >
       <CardContent className="space-y-4">
@@ -108,8 +110,8 @@ export default function SubmissionCard({ submission, item, user }: Props) {
               <AvatarImage
                 width={50}
                 height={50}
-                src={user?.image as string}
-                alt={`${user?.name}'s Avatar`}
+                src={claimer?.image as string}
+                alt={`${claimer?.name}'s Avatar`}
               />
               <AvatarFallback
                 className="text-white text-2xl"
@@ -117,42 +119,26 @@ export default function SubmissionCard({ submission, item, user }: Props) {
                   backgroundColor: "oklch(0.9181 0.2323 126.72)",
                 }}
               >
-                {user?.name.slice(0, 2).toUpperCase()}
+                {claimer?.name.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-1">
               <h1 className="text-primary-green">
-                {user?.name}
+                {claimer?.name}
                 <span className="text-gray-400 ml-1">submitted</span>
               </h1>
-              <div className="flex gap-1 items-center">
-                <Badge className="items-center border-primary-green mt-1">
-                  <span className="text-sm text-primary-green">
-                    {item?.name}
-                  </span>
-                  <span className="text-xs text-gray-400">
-                    {itemTypes(item?.type as string)}
-                  </span>
-                </Badge>
-              </div>
             </div>
           </div>
           <div className="flex flex-col space-y-2">
             <Badge
               className={cn(
-                submission.status === "APPROVED" &&
-                  "bg-primary-green text-black",
-                submission.status === "PENDING" && "bg-yellow-600",
-                submission.status === "REJECTED" && "bg-red-600"
+                claim.status === "ACCEPTED" && "bg-primary-green text-black",
+                claim.status === "PENDING" && "bg-yellow-600",
+                claim.status === "REJECTED" && "bg-red-600"
               )}
             >
-              {submission.status.charAt(0).toUpperCase() +
-                submission.status.slice(1).toLowerCase()}
-            </Badge>
-            <Badge>
-              <span className="text-xs text-primary-green">
-                {item?.points} Points
-              </span>
+              {claim.status.charAt(0).toUpperCase() +
+                claim.status.slice(1).toLowerCase()}
             </Badge>
           </div>
         </div>
@@ -161,13 +147,13 @@ export default function SubmissionCard({ submission, item, user }: Props) {
         <div className="flex gap-2">
           <span className="text-gray-400 gap-1 flex items-center">
             <Calendar className="h-4 w-4 mr-1" />
-            Submitted: {new Date(submission.submittedAt).toLocaleDateString()}
+            Submitted: {new Date(claim.claimedAt).toLocaleDateString()}
           </span>
           <span className="text-gray-400 gap-1 flex items-center">
             <Calendar className="h-4 w-4 flex-shrink-0" />
             Reviewed:{" "}
-            {submission.reviewedAt
-              ? new Date(submission.reviewedAt).toLocaleDateString()
+            {claim.updatedAt
+              ? new Date(claim.updatedAt).toLocaleDateString()
               : "N/A"}
           </span>
         </div>
@@ -176,17 +162,19 @@ export default function SubmissionCard({ submission, item, user }: Props) {
             <DialogTrigger asChild>
               <Button
                 onClick={() => {
-                  form.setValue("id", submission.id);
+                  form.setValue("id", claim.id);
                   setIsDialogOpen(true);
                 }}
                 disabled={
-                  submission.status === "REJECTED" ||
-                  submission.status === "APPROVED"
+                  claim.status === "ACCEPTED" ||
+                  claim.status === "COMPLETED" ||
+                  claim.status === "REJECTED"
                 }
                 className="bg-green-500 hover:bg-green-600 text-black font-semibold py-3 rounded-lg transition-all duration-300"
               >
-                {submission.status === "APPROVED" ||
-                submission.status === "REJECTED" ? (
+                {claim.status === "ACCEPTED" ||
+                claim.status === "COMPLETED" ||
+                claim.status === "REJECTED" ? (
                   <>Reviewed</>
                 ) : (
                   <>
@@ -198,9 +186,9 @@ export default function SubmissionCard({ submission, item, user }: Props) {
             </DialogTrigger>
             <DialogContent className="bg-black backdrop-blur-md border-primary-green/50 text-white max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>Review Submission</DialogTitle>
+                <DialogTitle>Review Claim</DialogTitle>
                 <DialogDescription>
-                  Review the evidence and approve or reject this item submission
+                  Review the evidence and approve or reject this bounty claim
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
@@ -212,40 +200,30 @@ export default function SubmissionCard({ submission, item, user }: Props) {
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="flex justify-center flex-col space-y-2 ">
                         <span className="text-sm text-gray-400">User</span>
-                        <span className="text-primary-green">{user.name}</span>
-                      </div>
-                      <div className="flex justify-center flex-col space-y-2 ">
-                        <span className="text-sm text-gray-400">Item</span>
-                        <span className="text-primary-green">{item.name}</span>
-                      </div>
-                      <div className="flex justify-center flex-col space-y-2 ">
-                        <span className="text-sm text-gray-400">Points</span>
                         <span className="text-primary-green">
-                          {item.points}
+                          {claimer.name}
                         </span>
                       </div>
                       <div className="flex justify-center flex-col space-y-2 ">
-                        <span className="text-sm text-gray-400">Submitted</span>
+                        <span className="text-sm text-gray-400">Claimed</span>
                         <span className="text-primary-green">
-                          {new Date(
-                            submission.submittedAt
-                          ).toLocaleDateString()}
+                          {new Date(claim.claimedAt).toLocaleDateString()}
                         </span>
                       </div>
                     </div>
                     <div className="flex flex-col space-y-2">
                       <span className="text-sm text-gray-400">Evidence</span>
                       <Link
-                        href={submission.twitchClipUrl}
+                        href={claim.clipUrl}
                         target="_blank"
                         className="text-primary-green"
                       >
-                        {submission.twitchClipUrl.slice(0, 25)}...
+                        {claim.clipUrl.slice(0, 25)}...
                       </Link>
                     </div>
                     <FormField
                       control={form.control}
-                      name="rejectionReason"
+                      name="feedback"
                       render={({ field }) => (
                         <FormItem className="space-y-2">
                           <FormLabel className="text-gray-400 text-xs items-start flex flex-col">
@@ -280,12 +258,12 @@ export default function SubmissionCard({ submission, item, user }: Props) {
 
                       <Button
                         type="button"
-                        onClick={handleApprove}
+                        onClick={handleAccept}
                         className="bg-primary-green text-black transition-all duration-300 hover:bg-primary-green/60"
                         disabled={updateMutation.isPending}
                       >
                         <CheckCircle className="h-4 w-4 mr-1" />
-                        {updateMutation.isPending ? "Approving..." : "Approve"}
+                        {updateMutation.isPending ? "Accepting..." : "Accept"}
                       </Button>
                     </div>
                   </form>

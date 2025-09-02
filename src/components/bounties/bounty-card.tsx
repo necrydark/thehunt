@@ -44,12 +44,6 @@ type Props = {
       image: string | null;
       name: string;
     };
-    item: {
-      name: string;
-      source: string;
-      missionType: string;
-      maps: string;
-    };
   };
   onSubmit: (bountyId: string, clipUrl: string, message?: string) => void;
   isSubmitting: boolean;
@@ -144,30 +138,7 @@ export const BountyCard = ({ bounty, onSubmit, isSubmitting }: Props) => {
               ${bounty.price}
             </span>
           </div>
-          <div>
-            <span>Item:</span>
-            <span className="ml-2 font-semibold text-yellow-400">
-              {bounty.item.name}
-            </span>
-          </div>
-          <div>
-            <span>Source:</span>
-            <span className="ml-2 font-semibold text-yellow-400">
-              {bounty.item.source}
-            </span>
-          </div>
-          <div>
-            <span>Mission:</span>
-            <span className="ml-2 font-semibold text-yellow-400">
-              {bounty.item.missionType}
-            </span>
-          </div>
-          <div>
-            <span>Maps:</span>
-            <span className="ml-2 font-semibold text-yellow-400">
-              {bounty.item.maps}
-            </span>
-          </div>
+
           {bounty.description && (
             <div>
               <span>Description:</span>
@@ -191,6 +162,14 @@ export const BountyCard = ({ bounty, onSubmit, isSubmitting }: Props) => {
             <DialogTrigger asChild>
               <Button
                 className=" mt-4 shrink-0 text-black bg-primary-green hover:bg-primary-green/75 hover:opacity-90"
+                disabled={
+                  bounty.status === "CLAIMED" ||
+                  bounty.status === "COMPLETED" ||
+                  bounty.status === "EXPIRED" ||
+                  bounty.status === "CANCELLED" ||
+                  bounty.status === "PENDING" ||
+                  isSubmitting
+                }
                 onClick={handleClaimDialogOpen}
               >
                 Claim

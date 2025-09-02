@@ -120,8 +120,6 @@ model Item {
   updatedAt    DateTime     @updatedAt
   submissions  Submission[]
   userItems    UserItem[]
-
-  Bounty Bounty[]
 }
 
 model UserItem {
@@ -142,13 +140,11 @@ model Bounty {
   description String?
   price       Int
   issuedBy    String
-  status      BountyStatus @default(OPEN)
+  status      BountyStatus @default(PENDING)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  itemId      String
 
   // Relations
-  item   Item          @relation(fields: [itemId], references: [id], onDelete: Cascade)
   issuer User          @relation("BountyIssuer", fields: [issuedBy], references: [id])
   claims BountyClaim[]
 
@@ -183,10 +179,11 @@ enum BountyClaimStatus {
 }
 
 enum BountyStatus {
+  PENDING // Waiting for approval from admins
   OPEN // Available to claim
   CLAIMED // Someone claimed it  
   COMPLETED // Work done, bounty paid
-  CANCELLED // Issuer cancelled
+  CANCELLED // Issuer cancelled or admin cancelled
   EXPIRED // Past expiration
 }
 
