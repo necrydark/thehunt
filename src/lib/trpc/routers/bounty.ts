@@ -243,7 +243,6 @@ export const bountyRouter = router({
         });
       }
 
-      // Prevent users from claiming their own bounties
       if (bounty.issuedBy === ctx.user.id) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -251,19 +250,30 @@ export const bountyRouter = router({
         });
       }
 
-      const existingBountyClaim = await ctx.db.bountyClaim.findUnique({
+      const existingClaims = await ctx.db.bountyClaim.findMany({
         where: {
-          bountyId_claimedBy: {
-            claimedBy: ctx.user.id,
-            bountyId: input.bountyId,
-          },
+          bountyId: input.bountyId,
+          claimedBy: ctx.user.id,
         },
       });
 
-      if (existingBountyClaim) {
+      const approvedClaim = existingClaims.find(
+        (claim) => claim.status === "ACCEPTED"
+      );
+      if (approvedClaim) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "You already have a pending claim for this item.",
+          message: "You already have this item.",
+        });
+      }
+
+      const pendingClaim = existingClaims.find(
+        (claim) => claim.status === "PENDING"
+      );
+      if (pendingClaim) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You already have a pending claim for this bounty.",
         });
       }
 
@@ -279,6 +289,7 @@ export const bountyRouter = router({
             bountyId: input.bountyId,
             message: input.message,
             claimedBy: ctx.user.id,
+            status: "PENDING",
           },
           include: {
             bounty: {
@@ -334,7 +345,7 @@ export const bountyRouter = router({
       if (claim.bounty.issuedBy !== ctx.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "You can only manage your own bounty claims",
+          message: "You can't only manage your own bounty claims",
         });
       }
 

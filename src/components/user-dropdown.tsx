@@ -46,7 +46,7 @@ export default function UserDropdown({ user, onSignOut }: UserProps) {
                 href={`/dashboard`}
               >
                 <User2 className="mr-2 text-black" />
-                Profile
+                Dashboard
               </Link>
             </DropdownMenuItem>
             {user.role === "Admin" && (
