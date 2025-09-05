@@ -4,6 +4,7 @@ import { api } from "@/lib/trpc/client";
 import { Search } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import {
@@ -15,8 +16,11 @@ import {
 } from "../ui/select";
 import { WeaponCard } from "./weapon-card";
 
+const ITEMS_PER_PAGE = 20;
+
 export default function Checklist() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(0);
   const [category, setCategory] = useState("");
   const [rarity, setRarity] = useState("");
 
@@ -50,7 +54,8 @@ export default function Checklist() {
   } = api.item.getAll.useQuery(
     {
       search: debouncedSearchQuery,
-      limit: 370,
+      limit: ITEMS_PER_PAGE,
+      offset: page * ITEMS_PER_PAGE,
       category: category === " " ? undefined : category,
       rarity: rarity === " " ? undefined : parseInt(rarity) || undefined,
     },
@@ -191,6 +196,28 @@ export default function Checklist() {
             isSubmitting={submitMutation.isPending}
           />
         ))}
+      </div>
+
+      <div className="flex items-center justify-between pt-6">
+        <Button
+          onClick={() => setPage((p) => Math.max(0, p - 1))}
+          disabled={page === 0}
+          className="text-black hover:opacity-90 bg-primary-green hover:bg-primary-green/75 "
+        >
+          Previous
+        </Button>
+
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-primary-green">Page {page + 1}</span>
+        </div>
+
+        <Button
+          onClick={() => setPage((p) => p + 1)}
+          disabled={!mergedItems || mergedItems.length < ITEMS_PER_PAGE}
+          className="text-black hover:opacity-90 bg-primary-green hover:bg-primary-green/75 "
+        >
+          Next
+        </Button>
       </div>
     </>
   );
