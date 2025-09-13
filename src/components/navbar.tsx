@@ -63,7 +63,7 @@ export const Navbar = () => {
               className="drop-shadow-lg"
             />
           </Link>
-          <Badge className="bg-primary-green text-black">Beta</Badge>
+          <Badge className="bg-primary-green text-black"> Beta v0.1.1</Badge>
         </div>
 
         {/* Desktop Nav with improved styling */}

@@ -1,6 +1,7 @@
 import { ExternalLink, Github, Heart, Twitch } from "lucide-react";
 import Link from "next/link";
 import { FaDiscord, FaX, FaYoutube } from "react-icons/fa6";
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 
 export default function Footer() {
@@ -10,7 +11,12 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-8 text-center md:text-left">
           {/* Copyright */}
           <div className="space-y-2">
-            <p className="text-white font-semibold">&copy; The Hunt 2025</p>
+            <p className="text-white font-semibold">
+              &copy; The Hunt 2025
+              <Badge className="bg-primary-green text-black ml-1">
+                Beta v0.1.1
+              </Badge>
+            </p>
             <p className="text-gray-400 text-sm">
               Made with <Heart className="inline w-4 h-4 text-red-500 mx-1" />{" "}
               for the community
