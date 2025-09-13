@@ -117,7 +117,7 @@ export const CountdownTimer = () => {
 
       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
         <Link href={"#how-to-participate"}>
-          <Button className="bg-green-500 hover:bg-green-600 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:scale-105">
+          <Button className=" bg-primary-green hover:bg-primary-green/75 text-black font-semibold py-3 rounded-lg transition-all duration-300">
             Join The Cause
           </Button>
         </Link>

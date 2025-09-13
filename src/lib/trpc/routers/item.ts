@@ -254,6 +254,29 @@ export const itemRouter = router({
       });
     }),
 
+  createMany: adminProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        points: z.number().min(1),
+        mayhem: z.string(),
+        listGroup: z.string(),
+        type: z.string(),
+        manufacturer: z.string().optional(),
+        source: z.string(),
+        maps: z.string(),
+        missionType: z.string(),
+        rarity: z.number().min(1).max(5),
+        notes: z.string().optional(),
+        imageUrl: z.string().url().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.item.createMany({
+        data: input,
+      });
+    }),
+
   update: adminProcedure
     .input(
       z.object({

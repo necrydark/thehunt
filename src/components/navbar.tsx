@@ -95,7 +95,7 @@ export const Navbar = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button className="bg-green-500 hover:bg-green-600 text-black font-semibold px-6 py-2 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-green-500/25">
+            <Button className=" bg-primary-green  hover:bg-primary-green/75 text-black font-semibold py-3 rounded-lg transition-all duration-300">
               Donate
             </Button>
           </Link>
@@ -174,7 +174,7 @@ export const Navbar = () => {
               rel="noopener noreferrer"
               onClick={() => setIsMenuOpen(false)}
             >
-              <Button className="w-full bg-green-500 hover:bg-green-600 text-black font-semibold py-3 rounded-lg transition-all duration-300">
+              <Button className=" bg-primary-green  hover:bg-primary-green/75 text-black font-semibold py-3 rounded-lg transition-all duration-300">
                 Donate
               </Button>
             </Link>

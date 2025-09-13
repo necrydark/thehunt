@@ -142,34 +142,50 @@ export default async function Home() {
                 View the recent website updates.
               </p>
             </div>
-            {changelogs?.slice(0, 2).map((changelog) => (
-              <Card
-                className="group bg-black/40 backdrop-blur-sm border-[#BBFE17]/30 hover:border-[#BBFE17] transition-all duration-300 hover:shadow-lg hover:shadow-[#BBFE17]/20"
-                key={changelog.slug}
-              >
-                <CardHeader>
-                  <CardTitle className="text-white">
-                    {changelog.data.title}
-                  </CardTitle>
-                  <CardDescription className="text-gray-300">
-                    {changelog.data.date}
-                  </CardDescription>
-                </CardHeader>
-                <CardFooter>
-                  <Button
-                    asChild
-                    className=" bg-primary-green mt-4 hover:bg-primary-green/75 text-black font-semibold py-3 rounded-lg transition-all duration-300"
+            <div className="flex flex-col space-y-4">
+              {changelogs
+                ?.sort(
+                  (a, b) =>
+                    new Date(b.data.date).getTime() -
+                    new Date(a.data.date).getTime()
+                )
+                .slice(0, 2)
+                .map((changelog) => (
+                  <Card
+                    className="group bg-black/40 backdrop-blur-sm border-[#BBFE17]/30 hover:border-[#BBFE17] transition-all duration-300 hover:shadow-lg hover:shadow-[#BBFE17]/20"
+                    key={changelog.slug}
                   >
-                    <Link
-                      className="no-underline"
-                      href={`/changelogs/${changelog.slug}`}
-                    >
-                      Read More
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+                    <CardHeader>
+                      <CardTitle className="text-white">
+                        {changelog.data.title}
+                      </CardTitle>
+                      <CardDescription className="text-gray-300">
+                        {changelog.data.date}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardFooter>
+                      <Button
+                        asChild
+                        className=" bg-primary-green mt-4 hover:bg-primary-green/75 text-black font-semibold py-3 rounded-lg transition-all duration-300"
+                      >
+                        <Link
+                          className="no-underline"
+                          href={`/changelogs/${changelog.slug}`}
+                        >
+                          Read More
+                        </Link>
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+            </div>
+            <div className="flex justify-center">
+              <Link href={"/changelogs"}>
+                <Button className=" bg-primary-green mt-4 hover:bg-primary-green/75 text-black font-semibold py-3 rounded-lg transition-all duration-300">
+                  View All
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
         <div
@@ -283,7 +299,7 @@ export default async function Home() {
                   "https://tiltify.com/+borderlands-community/the-hunt-prepare-for-mayhem"
                 }
               >
-                <Button className="bg-gradient-to-r from-[#BBFE17] to-[#9FE317] hover:from-[#9FE317] hover:to-[#BBFE17] text-black font-bold px-8 py-4 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                <Button className=" bg-primary-green mt-4 hover:bg-primary-green/75 text-black font-semibold py-3 rounded-lg transition-all duration-300">
                   Donate Now
                 </Button>
               </Link>
@@ -316,7 +332,7 @@ export default async function Home() {
                     Created by PilotPlays Games
                   </p>
                   <Link href={"/obs-overlay.zip"}>
-                    <Button className="bg-gradient-to-r from-[#BBFE17] to-[#9FE317] hover:from-[#9FE317] hover:to-[#BBFE17] text-black font-bold px-8 py-4 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                    <Button className=" bg-primary-green mt-4 hover:bg-primary-green/75 text-black font-semibold py-3 rounded-lg transition-all duration-300">
                       Download Assets
                     </Button>
                   </Link>

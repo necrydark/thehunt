@@ -29,7 +29,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Plus } from "lucide-react";
+import { Files, Loader2, Plus } from "lucide-react";
+import * as Papa from "papaparse";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -42,6 +43,8 @@ type ItemCreateValues = z.infer<typeof itemSchema>;
 export default function ItemsTable() {
   const [page, setPage] = useState(0);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [data, setData] = useState<ItemCreateValues[]>([]);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -57,6 +60,17 @@ export default function ItemsTable() {
     },
     onError: (err) => {
       toast.error("Failed to create item. Please try again");
+      console.error("Update error:", err);
+    },
+  });
+
+  const createCSVMutation = api.item.createMany.useMutation({
+    onSuccess: async () => {
+      toast("Multiple items created via CSV file.");
+      await utils.item.getAll.invalidate();
+    },
+    onError: (err) => {
+      toast.error("Failed to create items. Please try again");
       console.error("Update error:", err);
     },
   });
@@ -93,6 +107,33 @@ export default function ItemsTable() {
     });
   };
 
+  const createCSVHandleSubmit = () => {
+    if (data && data.length > 0) {
+      data.map((d) => {
+        createCSVMutation.mutate({
+          ...d,
+        });
+      });
+    } else {
+      toast("Error there are not items uploaded.");
+    }
+  };
+
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      Papa.parse(files[0], {
+        header: true,
+        skipEmptyLines: true,
+        complete: function (res) {
+          setData(res.data as ItemCreateValues[]);
+        },
+      });
+    } else {
+      console.warn("No file selected or files is null.");
+    }
+  };
+
   if (itemsLoading) {
     return (
       <div className="relative mt-8">
@@ -127,82 +168,40 @@ export default function ItemsTable() {
               placeholder="Search item..."
               className="max-w-[400px] border-primary-green placeholder:text-white focus-visible:ring-0 focus-visible:border-primary-green text-primary-green"
             />
-            <Dialog
-              open={isCreateDialogOpen}
-              onOpenChange={setIsCreateDialogOpen}
-            >
-              <DialogTrigger asChild>
-                <Button className=" bg-primary-green hover:bg-primary-green/75 hover:shadow-md hover:shadow-primary-green/50 text-black font-semibold py-3 rounded-lg transition-all duration-300">
-                  <Plus className="h-4 w-4" />
-                  Create
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-black/20 backdrop-blur-lg border-primary-green">
-                <DialogHeader>
-                  <DialogTitle className="text-white">
-                    Item Creation
-                  </DialogTitle>
-                  <DialogDescription>Create an item.</DialogDescription>
-                </DialogHeader>
-                <Form {...createForm}>
-                  <form
-                    className="space-y-6"
-                    onSubmit={createForm.handleSubmit(createHandleSubmit)}
-                  >
-                    {/* Name Field */}
-                    <FormField
-                      control={createForm.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-white">Name</FormLabel>
-                          <FormControl>
-                            <Input
-                              className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
-                              placeholder="Item name"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    {/* Points and Mayhem - Row */}
-                    <div className="grid grid-cols-2 gap-4">
+            <div className="flex gap-4">
+              <Dialog
+                open={isCreateDialogOpen}
+                onOpenChange={setIsCreateDialogOpen}
+              >
+                <DialogTrigger asChild>
+                  <Button className=" bg-primary-green hover:bg-primary-green/75 hover:shadow-md hover:shadow-primary-green/50 text-black font-semibold py-3 rounded-lg transition-all duration-300">
+                    <Plus className="h-4 w-4" />
+                    Create
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-black/20 backdrop-blur-lg border-primary-green">
+                  <DialogHeader>
+                    <DialogTitle className="text-white">
+                      Item Creation
+                    </DialogTitle>
+                    <DialogDescription>Create an item.</DialogDescription>
+                  </DialogHeader>
+                  <Form {...createForm}>
+                    <form
+                      className="space-y-6"
+                      onSubmit={createForm.handleSubmit(createHandleSubmit)}
+                    >
+                      {/* Name Field */}
                       <FormField
                         control={createForm.control}
-                        name="points"
+                        name="name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white">Points</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="number"
-                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
-                                placeholder="1"
-                                min={1}
-                                {...field}
-                                onChange={(e) =>
-                                  field.onChange(Number(e.target.value))
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={createForm.control}
-                        name="mayhem"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-white">Mayhem</FormLabel>
+                            <FormLabel className="text-white">Name</FormLabel>
                             <FormControl>
                               <Input
                                 className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
-                                placeholder="0"
+                                placeholder="Item name"
                                 {...field}
                               />
                             </FormControl>
@@ -210,246 +209,336 @@ export default function ItemsTable() {
                           </FormItem>
                         )}
                       />
-                    </div>
 
-                    {/* Type and Rarity - Row */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <FormField
-                        control={createForm.control}
-                        name="type"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-white">Type</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                            >
+                      {/* Points and Mayhem - Row */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                          control={createForm.control}
+                          name="points"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-white">
+                                Points
+                              </FormLabel>
                               <FormControl>
-                                <SelectTrigger className="border-primary-green bg-black/50 text-white  focus-visible:ring-0 focus-visible:border-primary-green">
-                                  <SelectValue placeholder="Select type" />
-                                </SelectTrigger>
+                                <Input
+                                  type="number"
+                                  className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
+                                  placeholder="1"
+                                  min={1}
+                                  {...field}
+                                  onChange={(e) =>
+                                    field.onChange(Number(e.target.value))
+                                  }
+                                />
                               </FormControl>
-                              <SelectContent className="bg-black border-primary-green">
-                                <SelectItem
-                                  className="text-white hover:bg-primary-green hover:text-black"
-                                  value="PSTL"
-                                >
-                                  Pistol
-                                </SelectItem>
-                                <SelectItem
-                                  className="text-white hover:bg-primary-green hover:text-black"
-                                  value="SHLD"
-                                >
-                                  Shield
-                                </SelectItem>
-                                <SelectItem
-                                  className="text-white hover:bg-primary-green hover:text-black"
-                                  value="GRND"
-                                >
-                                  Grenade
-                                </SelectItem>
-                                <SelectItem
-                                  className="text-white hover:bg-primary-green hover:text-black"
-                                  value="COM"
-                                >
-                                  Class Mod
-                                </SelectItem>
-                                <SelectItem
-                                  className="text-white hover:bg-primary-green hover:text-black"
-                                  value="AR"
-                                >
-                                  Assault Rifle
-                                </SelectItem>
-                                <SelectItem
-                                  className="text-white hover:bg-primary-green hover:text-black"
-                                  value="SNPR"
-                                >
-                                  Sniper
-                                </SelectItem>
-                                <SelectItem
-                                  className="text-white hover:bg-primary-green hover:text-black"
-                                  value="SHTGN"
-                                >
-                                  Shotgun
-                                </SelectItem>
-                                <SelectItem
-                                  className="text-white hover:bg-primary-green hover:text-black"
-                                  value="SMG"
-                                >
-                                  SMG
-                                </SelectItem>
-                                <SelectItem
-                                  className="text-white hover:bg-primary-green hover:text-black"
-                                  value="LNCHR"
-                                >
-                                  Launcher
-                                </SelectItem>
-                                <SelectItem
-                                  className="text-white hover:bg-primary-green hover:text-black"
-                                  value="ARTF"
-                                >
-                                  Artifact
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
 
+                        <FormField
+                          control={createForm.control}
+                          name="mayhem"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-white">
+                                Mayhem
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
+                                  placeholder="0"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      {/* Type and Rarity - Row */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                          control={createForm.control}
+                          name="type"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-white">Type</FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger className="border-primary-green bg-black/50 text-white  focus-visible:ring-0 focus-visible:border-primary-green">
+                                    <SelectValue placeholder="Select type" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="bg-black border-primary-green">
+                                  <SelectItem
+                                    className="text-white hover:bg-primary-green hover:text-black"
+                                    value="PSTL"
+                                  >
+                                    Pistol
+                                  </SelectItem>
+                                  <SelectItem
+                                    className="text-white hover:bg-primary-green hover:text-black"
+                                    value="SHLD"
+                                  >
+                                    Shield
+                                  </SelectItem>
+                                  <SelectItem
+                                    className="text-white hover:bg-primary-green hover:text-black"
+                                    value="GRND"
+                                  >
+                                    Grenade
+                                  </SelectItem>
+                                  <SelectItem
+                                    className="text-white hover:bg-primary-green hover:text-black"
+                                    value="COM"
+                                  >
+                                    Class Mod
+                                  </SelectItem>
+                                  <SelectItem
+                                    className="text-white hover:bg-primary-green hover:text-black"
+                                    value="AR"
+                                  >
+                                    Assault Rifle
+                                  </SelectItem>
+                                  <SelectItem
+                                    className="text-white hover:bg-primary-green hover:text-black"
+                                    value="SNPR"
+                                  >
+                                    Sniper
+                                  </SelectItem>
+                                  <SelectItem
+                                    className="text-white hover:bg-primary-green hover:text-black"
+                                    value="SHTGN"
+                                  >
+                                    Shotgun
+                                  </SelectItem>
+                                  <SelectItem
+                                    className="text-white hover:bg-primary-green hover:text-black"
+                                    value="SMG"
+                                  >
+                                    SMG
+                                  </SelectItem>
+                                  <SelectItem
+                                    className="text-white hover:bg-primary-green hover:text-black"
+                                    value="LNCHR"
+                                  >
+                                    Launcher
+                                  </SelectItem>
+                                  <SelectItem
+                                    className="text-white hover:bg-primary-green hover:text-black"
+                                    value="ARTF"
+                                  >
+                                    Artifact
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={createForm.control}
+                          name="rarity"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-white">
+                                Rarity
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  min={1}
+                                  max={5}
+                                  type="number"
+                                  className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50 "
+                                  {...field}
+                                  onChange={(e) =>
+                                    field.onChange(Number(e.target.value))
+                                  }
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      {/* Source and Maps - Row */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                          control={createForm.control}
+                          name="source"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-white">
+                                Source
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
+                                  placeholder="Item source"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={createForm.control}
+                          name="maps"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-white">Maps</FormLabel>
+                              <FormControl>
+                                <Input
+                                  className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
+                                  placeholder="Available maps"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      {/* List Group and Mission Type - Row */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                          control={createForm.control}
+                          name="listGroup"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-white">
+                                List Group
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
+                                  placeholder="Group classification"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={createForm.control}
+                          name="missionType"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-white">
+                                Mission Type
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
+                                  placeholder="Mission type"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      {/* Notes Field */}
                       <FormField
                         control={createForm.control}
-                        name="rarity"
+                        name="notes"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white">Rarity</FormLabel>
+                            <FormLabel className="text-white">Notes</FormLabel>
                             <FormControl>
-                              <Input
-                                min={1}
-                                max={5}
-                                type="number"
-                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50 "
+                              <Textarea
+                                className="border-primary-green bg-black/50 resize-none text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
+                                placeholder="Additional notes..."
+                                rows={3}
                                 {...field}
-                                onChange={(e) =>
-                                  field.onChange(Number(e.target.value))
-                                }
                               />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                    </div>
+                      <div className="flex justify-end gap-3 mt-6">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setIsCreateDialogOpen(false)}
+                          className="bg-black text-white hover:text-white/75 hover:bg-black"
+                          disabled={createMutation.isPending}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          className=" bg-primary-green hover:bg-primary-green/75 hover:shadow-md hover:shadow-primary-green/50 text-black font-semibold py-3 rounded-lg transition-all duration-300"
+                          type="submit"
+                        >
+                          {createMutation.isPending ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Creating...
+                            </>
+                          ) : (
+                            "Create Item"
+                          )}
+                        </Button>
+                      </div>
+                    </form>
+                  </Form>
+                </DialogContent>
+              </Dialog>
+              <Dialog
+                open={isUploadDialogOpen}
+                onOpenChange={setIsUploadDialogOpen}
+              >
+                <DialogTrigger asChild>
+                  <Button className=" bg-primary-green hover:bg-primary-green/75 hover:shadow-md hover:shadow-primary-green/50 text-black font-semibold py-3 rounded-lg transition-all duration-300">
+                    <Files className="h-4 w-4" />
+                    Upload
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-black/20 backdrop-blur-lg border-primary-green">
+                  <DialogHeader>
+                    <DialogTitle className="text-white">
+                      Create Multiple Items
+                    </DialogTitle>
+                    <DialogDescription>
+                      Upload a file of items.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <Input
+                    type="file"
+                    name="file"
+                    accept=".csv"
+                    onChange={changeHandler}
+                    className=" bg-primary-green hover:bg-primary-green/75 hover:shadow-md hover:shadow-primary-green/50 text-black font-semibold rounded-lg transition-all duration-300"
+                  />
 
-                    {/* Source and Maps - Row */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <FormField
-                        control={createForm.control}
-                        name="source"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-white">Source</FormLabel>
-                            <FormControl>
-                              <Input
-                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
-                                placeholder="Item source"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={createForm.control}
-                        name="maps"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-white">Maps</FormLabel>
-                            <FormControl>
-                              <Input
-                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
-                                placeholder="Available maps"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    {/* List Group and Mission Type - Row */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <FormField
-                        control={createForm.control}
-                        name="listGroup"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-white">
-                              List Group
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
-                                placeholder="Group classification"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={createForm.control}
-                        name="missionType"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-white">
-                              Mission Type
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                className="border-primary-green bg-black/50 text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
-                                placeholder="Mission type"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    {/* Notes Field */}
-                    <FormField
-                      control={createForm.control}
-                      name="notes"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-white">Notes</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              className="border-primary-green bg-black/50 resize-none text-white focus-visible:ring-0 focus-visible:border-primary-green autofill:bg-black/50"
-                              placeholder="Additional notes..."
-                              rows={3}
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <div className="flex justify-end gap-3 mt-6">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setIsCreateDialogOpen(false)}
-                        className="bg-black text-white hover:text-white/75 hover:bg-black"
-                        disabled={createMutation.isPending}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        className=" bg-primary-green hover:bg-primary-green/75 hover:shadow-md hover:shadow-primary-green/50 text-black font-semibold py-3 rounded-lg transition-all duration-300"
-                        type="submit"
-                      >
-                        {createMutation.isPending ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Creating...
-                          </>
-                        ) : (
-                          "Create Item"
-                        )}
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
-              </DialogContent>
-            </Dialog>
+                  <div className="flex justify-end">
+                    <Button
+                      onClick={createCSVHandleSubmit}
+                      disabled={createCSVMutation.isPending || data.length <= 0}
+                      className=" bg-primary-green hover:bg-primary-green/75 hover:shadow-md hover:shadow-primary-green/50 text-black font-semibold py-3 rounded-lg transition-all duration-300"
+                    >
+                      Submit
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
           {items?.map((item) => {
             return (
